@@ -1,0 +1,34 @@
+data
+{
+	"Vertices" : 
+	{
+		"Label1" : [0, 0, 0, true],
+		"Label2" : [0, 0, 0, false],
+		"Label3" : [0, 0, 0, false]
+	},
+	"Edges" : 
+	{
+		"Member1": {
+			"Endpoints": ["Label1", "Label2"],
+			"ElasticModulus": 0.0,
+			"SectionArea": 0.25
+		},
+		"Member1": {
+			"Endpoints": ["Label2", "Label3"],
+			"ElasticModulus": 0.0,
+			"SectionArea": 0.25
+		},
+		"Member1": {
+			"Endpoints": ["Label3", "Label1"],
+			"ElasticModulus": 0.0,
+			"SectionArea": 0.25
+		}
+	},
+	"PointForces" : {
+		"Label1" : [10, 100, 0],
+		"Label2" : [0, 0, 30]
+	},
+	"MemberForces" : {
+		"Member2" : 89
+	}
+}
