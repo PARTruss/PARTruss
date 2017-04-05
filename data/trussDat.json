@@ -6,17 +6,17 @@ data
 		"Label1" : {
 			"XYZPosition": [0, 0, 0],
 			"XYZAppliedForces" : [0, 5.0, 0],
-			"Anchor" : true,
+			"Anchored" : [true, false, true]
 		},
 		"Label2" : {
 			"XYZPosition": [0, 1, 0],
 			"XYZAppliedForces" : [0, 5.0, 0],
-			"Anchor" : false,
+			"Anchored" : [true, false, true]
 		},
 		"Label3" : {
 			"XYZPosition": [2, 2, 0],
 			"XYZAppliedForces" : [0, -10, 0],
-			"Anchor" : false,
+			"Anchored" : [true, false, true]
 		}
 	},
 	"Edges" : 

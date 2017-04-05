@@ -1,5 +1,7 @@
 # Truss structure file specification for PARTruss project
 This file format uses the JSON schema for organization of keys and values
+Some inspiration was taken from this document for the Abaqus commercial FME solving tool:
+http://imechanica.org/files/1-2%20Learning%20ABAQUS.pdf
 
 ## Structure
 The truss structure file format has two sections:
@@ -12,13 +14,13 @@ Each of these entries specifies a pin-connection for the truss structure, which 
 		"Label1" : {
 			"XYZPosition": [0, 0, 0],
 			"XYZAppliedForces" : [0, 5.0, 0],
-			"Anchor" : true,
+			"Anchored" : [true, false, true]
 		},
 		>
 * "Label1" is a __unique string__ identifying that specific vertex in the structure.
 * The three __float__ values tagged by "XYZPosition" are the __x__, __y__, and __z__ coordinates of the vertex with reference to the global three-axis system used in the the simulation.
 * The three __float__ values tagged "XYZAppliedForces" are the forces applied to that point in the __x__, __y__, and __z__ directions.
-* The __boolean__ value tagged "Anchor" [true | false] defines whether this vertex is an anchor point or not. For simulations in which deformation of the members is allowed, this means that this vertex will not move, though others may in response to system stresses.
+* The array of __boolean__ values tagged "Anchored" [true | false] defines whether this vertex is immoveable in each coordinate axis direction. For simulations in which deformation of the members is allowed, this means that this vertex will not move along that axis, though others may in response to system stresses.
 
 ### Edges
 Each edge represents a structural connection (_member_) between two vertices. Each value looks like this:
