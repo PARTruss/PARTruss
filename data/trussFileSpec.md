@@ -2,10 +2,9 @@
 This file format uses the JSON schema for organization of keys and values
 
 ## Structure
-The truss structure file format is made of several top level sections:
+The truss structure file format has two sections:
 * Vertices
 * Edges
-* EdgeForces
 
 ### Vertices
 Each of these entries specifies a pin-connection for the truss structure, which is where several edges (members) meet. Each value looks like this:
