@@ -1,34 +1,46 @@
+#  This is a template file for the truss file specification
 data
 {
 	"Vertices" : 
 	{
-		"Label1" : [0, 0, 0, true],
-		"Label2" : [0, 0, 0, false],
-		"Label3" : [0, 0, 0, false]
+		"Label1" : {
+			"XYZPosition": [0, 0, 0],
+			"XYZAppliedForces" : [0, 5.0, 0],
+			"Anchor" : true,
+		},
+		"Label2" : {
+			"XYZPosition": [0, 1, 0],
+			"XYZAppliedForces" : [0, 5.0, 0],
+			"Anchor" : false,
+		},
+		"Label3" : {
+			"XYZPosition": [2, 2, 0],
+			"XYZAppliedForces" : [0, -10, 0],
+			"Anchor" : false,
+		}
 	},
 	"Edges" : 
 	{
 		"Member1": {
 			"Endpoints": ["Label1", "Label2"],
-			"ElasticModulus": 0.0,
-			"SectionArea": 0.25
-		},
+			"ElasticModulus" : 0.0,
+			"SectionArea" : 0.25,
+			"Force" : 0.0,
+			"Stress" : 0.0
+ 		},
 		"Member1": {
 			"Endpoints": ["Label2", "Label3"],
 			"ElasticModulus": 0.0,
-			"SectionArea": 0.25
+			"SectionArea": 0.25,
+			"Force" : 0.0,
+			"Stress" : 0.0
 		},
 		"Member1": {
 			"Endpoints": ["Label3", "Label1"],
 			"ElasticModulus": 0.0,
-			"SectionArea": 0.25
+			"SectionArea": 0.25,
+			"Force" : 0.0,
+			"Stress" : 0.0
 		}
-	},
-	"PointForces" : {
-		"Label1" : [10, 100, 0],
-		"Label2" : [0, 0, 30]
-	},
-	"MemberForces" : {
-		"Member2" : 89
 	}
 }
