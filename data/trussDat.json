@@ -1,46 +1,45 @@
 #  This is a template file for the truss file specification
-data
 {
 	"Vertices" : 
-	{
-		"Label1" : {
-			"XYZPosition": [0, 0, 0],
+	[
+		{
+			"XYZPosition": [-0.5, -0.5, 0],
 			"XYZAppliedForces" : [0, 5.0, 0],
 			"Anchored" : [true, false, true]
 		},
-		"Label2" : {
-			"XYZPosition": [0, 1, 0],
+		{
+			"XYZPosition": [-0.5, 0, 0],
 			"XYZAppliedForces" : [0, 5.0, 0],
 			"Anchored" : [true, false, true]
 		},
-		"Label3" : {
-			"XYZPosition": [2, 2, 0],
+		{
+			"XYZPosition": [0.5, 0.5, 0],
 			"XYZAppliedForces" : [0, -10, 0],
 			"Anchored" : [true, false, true]
 		}
-	},
+	],
 	"Edges" : 
-	{
-		"Member1": {
-			"Endpoints": ["Label1", "Label2"],
+	[
+		{
+			"Endpoints": [ 0, 1 ],
 			"ElasticModulus" : 0.0,
 			"SectionArea" : 0.25,
 			"Force" : 0.0,
 			"Stress" : 0.0
  		},
-		"Member1": {
-			"Endpoints": ["Label2", "Label3"],
+		{
+			"Endpoints": [ 1, 2 ],
 			"ElasticModulus": 0.0,
 			"SectionArea": 0.25,
 			"Force" : 0.0,
 			"Stress" : 0.0
 		},
-		"Member1": {
-			"Endpoints": ["Label3", "Label1"],
+		{
+			"Endpoints": [ 2, 0 ],
 			"ElasticModulus": 0.0,
 			"SectionArea": 0.25,
 			"Force" : 0.0,
 			"Stress" : 0.0
 		}
-	}
+	]
 }
