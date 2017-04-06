@@ -23,7 +23,7 @@ window.onload = function init()
             drawTruss(xhr.responseText);
         }
     };
-    xhr.open("GET","/data/example.json"); 
+    xhr.open("GET","../../data/example.json"); 
     xhr.send();
 
 };
