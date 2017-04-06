@@ -30,14 +30,7 @@ window.onload = function init()
 
 function drawTruss(raw){
 
-    //alert(raw);
-
     var data = JSON.parse(raw);
-
-    //alert(data["Vertices"]);
-    //alert(data["Edges"]);
-
-
 
     var vertices = [];
     var edges = []; 
@@ -46,11 +39,11 @@ function drawTruss(raw){
     	vertices.push(vec3(data.Vertices[i].XYZPosition));
     }
 
-    for(edge in data.Edges){
-    	edges.push(data.Edges[edge].Endpoints);
+    for(var i=0;i<data.Edges.length;i++){
+        edges.push(data.Edges[i].Endpoints);
     }
 
-    //alert(edges.length);
+    vertices = normalize(vertices);
 
     //
     //  Configure WebGL
@@ -88,17 +81,33 @@ function drawTruss(raw){
     gl.drawElements(gl.LINES, edges.length*2, gl.UNSIGNED_SHORT, 0)
 }
 
-/*function normalize(data){
+function normalize(data){
     var mag=0.00;
+    var maxX, minX, maxY, minY, maxZ, minZ;
+    maxX = minX = maxY = minY = maxZ = minZ = 0;
     for(i=0; i<data.length; i++){
-        if(data[i]>mag)
-            mag=data[i];
-        if((-data[i])>mag)
-            mag=-data[i];
+        if(data[i][0]>maxX) maxX=data[i][0];
+        if(data[i][0]<minX) minX=data[i][0];
+        if(data[i][1]>maxY) maxY=data[i][1];
+        if(data[i][1]<minY) minY=data[i][1];
+        if(data[i][2]>maxZ) maxZ=data[i][2];
+        if(data[i][2]<minZ) minZ=data[i][2];
     }
+    mag=maxX-minX;
+    if(mag < maxY-minY) mag = maxY-minY;
+    if(mag < maxZ-minZ) mag = maxZ-minZ;
+    mag=mag/1.5;
+    var dx=-(maxX+minX)/(2*mag);
+    var dy=-(maxY+minY)/(2*mag);
+    var dz=-(maxZ+minZ)/(2*mag);
+
     var out = [];
+    var x, y, z;
     for(i=0; i<data.length; i++){
-        out.push(data[i]/mag);
+        x=data[i][0]/mag+dx;
+        y=data[i][1]/mag+dy;
+        z=data[i][2]/mag+dz;
+        out.push([x, y, z])
     }
     return out;
-}*/
+}
