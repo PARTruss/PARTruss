@@ -10,13 +10,13 @@ The truss structure file format has two sections:
 
 ### Vertices
 Each of these entries specifies a pin-connection for the truss structure, which is where several edges (members) meet. Each value looks like this:
-<
-		"Label1" : {
-			"XYZPosition": [0, 0, 0],
-			"XYZAppliedForces" : [0, 5.0, 0],
-			"Anchored" : [true, false, true]
-		},
-		>
+
+	"Label1" : {
+		"XYZPosition": [0, 0, 0],
+		"XYZAppliedForces" : [0, 5.0, 0],
+		"Anchored" : [true, false, true]
+	},
+
 * "Label1" is a __unique string__ identifying that specific vertex in the structure.
 * The three __float__ values tagged by "XYZPosition" are the __x__, __y__, and __z__ coordinates of the vertex with reference to the global three-axis system used in the the simulation.
 * The three __float__ values tagged "XYZAppliedForces" are the forces applied to that point in the __x__, __y__, and __z__ directions.
@@ -24,13 +24,15 @@ Each of these entries specifies a pin-connection for the truss structure, which 
 
 ### Edges
 Each edge represents a structural connection (_member_) between two vertices. Each value looks like this:
-<"Member1": {
-			"Endpoints": ["Label1", "Label2"],
-			"ElasticModulus": 0.0,
-			"SectionArea": 0.25,
-			"Force" : 0.0,
-			"Stress" : 0.0
-		},>
+
+	"Member1": {
+		"Endpoints": ["Label1", "Label2"],
+		"ElasticModulus": 0.0,
+		"SectionArea": 0.25,
+		"Force" : 0.0,
+		"Stress" : 0.0
+	},
+	
 * "Member1" is a __unique string__ identifying that member in the simulation.
 * "Endpoints" is the internal key referencing the two vertices ("Label1" and "Label2") that the member joins.
 * ElasticModulus is a __float__ value representing the Young's Modulus (Modulus of Elasticity) of the material that "Member1" is made of. This is only to be used for deformation (strain) calculations, and is not necessary when simply resolving forces in each member for stress analysis.
