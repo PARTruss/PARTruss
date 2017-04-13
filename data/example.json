@@ -21,27 +21,27 @@
 		}
 	],
 	"Edges" : 
-	{
-		"Member1": {
-			"Endpoints": [0, 1],
+	[
+		{
+			"Endpoints": [ 0, 1 ],
 			"ElasticModulus" : 0.0,
 			"SectionArea" : 0.25,
 			"Force" : 0.0,
 			"Stress" : 0.0
  		},
-		"Member2": {
-			"Endpoints": [1, 2],
+		{
+			"Endpoints": [ 1, 2 ],
 			"ElasticModulus": 0.0,
 			"SectionArea": 0.25,
 			"Force" : 0.0,
 			"Stress" : 0.0
 		},
-		"Member3": {
-			"Endpoints": [2, 0],
+		{
+			"Endpoints": [ 2, 0 ],
 			"ElasticModulus": 0.0,
 			"SectionArea": 0.25,
 			"Force" : 0.0,
 			"Stress" : 0.0
 		}
-	}
+	]
 }
