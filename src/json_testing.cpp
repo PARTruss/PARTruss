@@ -13,5 +13,8 @@ int main(){
     json j;
     i >> j;
     std::cout << j;
+    while(json::iterator itr = j.Vertices.start; itr != j.Vertices.end; itr++){
+        std::cout << *itr;
+    }
     return 1;
 }
