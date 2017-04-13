@@ -12,9 +12,9 @@ int main(){
     std::ifstream i("data/trussDat.json");
     json j;
     i >> j;
-    std::cout << j;
-    while(json::iterator itr = j.Vertices.start; itr != j.Vertices.end; itr++){
-        std::cout << *itr;
+    std::cout << j << '\n' << '\n';
+    for (json::iterator itr = j["Vertices"].begin(); itr != j["Vertices"].end(); itr++){
+        std::cout << *itr << '\n';
     }
     return 1;
 }
