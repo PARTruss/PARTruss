@@ -14,12 +14,14 @@ Each of these entries specifies a pin-connection for the truss structure, which 
 	{
 		"XYZPosition": [0, 0, 0],
 		"XYZAppliedForces" : [0, 5.0, 0],
-		"Anchored" : [true, false, true]
+		"Anchored" : [true, false, true],
+		"ExtForce" : [20, 20, 10]
 	},
 
 * The three __float__ values tagged by "XYZPosition" are the __x__, __y__, and __z__ coordinates of the vertex with reference to the global three-axis system used in the the simulation.
 * The three __float__ values tagged "XYZAppliedForces" are the forces applied to that point in the __x__, __y__, and __z__ directions.
 * The array of __boolean__ values tagged "Anchored" [true | false] defines whether this vertex is immoveable in each coordinate axis direction. For simulations in which deformation of the members is allowed, this means that this vertex will not move along that axis, though others may in response to system strains.
+* "ExtForce" represents externally applied forces/loads on the truss system, which constitute the "known" values for the system. The default value here should be 0 in each axis direction. The system should be initialized such that these forces satisfy equilibrium conditions on the whole truss (sum of all external forces in the x, y, and z directions should be 0 and the moment about each axis should also be 0).
 
 ### Edges
 Each edge represents a structural connection (_member_) between two vertices. Each value looks like this:
