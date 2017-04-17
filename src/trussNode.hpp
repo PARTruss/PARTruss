@@ -8,7 +8,7 @@
 class trussNode
 {
 public:
-	trussNode( std::string const & label, double x, double y, double z, 
+	trussNode( double x, double y, double z, 
 		bool moveX, bool moveY, bool moveZ, double Fx, double Fy, double Fz);
 	void addNeighbor( trussNode const & adj, double section, double E);
 	double const getXCoord() const { return this->_coordX; }
@@ -23,7 +23,6 @@ private:
 	double const zProjNormTo( trussNode const & adj);
 
 // Representation:
-	std::string _label;
 	bool _moveX;
 	bool _moveY;
 	bool _moveZ;

@@ -2,9 +2,9 @@
 
 // trussNode class implementation 
 
-trussNode::trussNode(const std::string & label, double x, double y, double z, 
+trussNode::trussNode( double x, double y, double z, 
 	bool moveX, bool moveY, bool moveZ, double Fx, double Fy, double Fz)
-: _label(label), _coordX(x), _coordY(y), _coordZ(z), _moveX(moveX), 
+: _coordX(x), _coordY(y), _coordZ(z), _moveX(moveX), 
 _moveY(moveY), _moveZ(moveZ), _extForceX(Fx), _extForceY(Fy), _extForceZ(Fz)
 {
 	_neighbors = std::vector<trussNode>();
