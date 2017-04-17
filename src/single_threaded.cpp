@@ -37,26 +37,25 @@ int main( int argc, char ** argv )
     // Loop through all vertices and add them to the vector
     for (json::iterator itr = j["Vertices"].begin(); itr != j["Vertices"].end(); itr++)
     {
-        std::cout << *itr << '\n';
         double x = (*itr)["XYZPosition"][0];
-		double y = itr["XYZPosition"][1];
-        double z = itr["XYZPosition"][2];
-        bool moveX = itr["Anchored"][0];
-        bool moveY = itr["Anchored"][1];
-        bool moveZ = itr["Anchored"][2];
-        double Fx = itr["XYZAppliedForces"][0];
-        double Fy = itr["XYZAppliedForces"][1];
-        double Fz = itr["XYZAppliedForces"][2];
+		double y =(*itr)["XYZPosition"][1];
+        double z =(*itr)["XYZPosition"][2];
+        bool moveX =(*itr)["Anchored"][0];
+        bool moveY =(*itr)["Anchored"][1];
+        bool moveZ =(*itr)["Anchored"][2];
+        double Fx =(*itr)["XYZAppliedForces"][0];
+        double Fy =(*itr)["XYZAppliedForces"][1];
+        double Fz =(*itr)["XYZAppliedForces"][2];
         vertices.push_back( trussNode(x, y, z, moveX, moveY, moveZ, Fx, Fy, Fz) );
     }
 
     // Now iterate over the edges and create the connections between trussNodes
     for (json::iterator itr = j["Edges"].begin(); itr != j["Edges"].end(); itr++)
     {
- 		int e0 = itr["Endpoints"][0];
- 		int e1 = itr["Endpoints"][1];
-    	double E = itr["ElasticModulus"];
-    	double section = itr["SectionArea"];
+ 		int e0 =(*itr)["Endpoints"][0];
+ 		int e1 =(*itr)["Endpoints"][1];
+    	double E =(*itr)["ElasticModulus"];
+    	double section =(*itr)["SectionArea"];
     	vertices[e0].addNeighbor( vertices[e1], section, E );
     	vertices[e1].addNeighbor( vertices[e0], section, E );
     }
