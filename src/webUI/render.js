@@ -13,6 +13,8 @@ var camera = {
     z: 2.0
 }
 
+var dx=0,dy=0,dz=0;
+
 var modelViewMatrixLoc, projectionMatrixLoc;
 
 var radius = 6.0;
@@ -45,8 +47,10 @@ window.onload = function init()
         getAndDrawFile(this.files[0]);
     }
 
+    var shift = false;
     canvas.onmousedown = function(e) {
         isDown = true;
+        shift=e.shiftKey;
 
         startCoords = [
             e.offsetX - last[0], // set start coordinates
@@ -56,7 +60,7 @@ window.onload = function init()
 
     canvas.onmouseup   = function(e) {
         isDown = false;
-
+        shift=false;
         last = [
             e.offsetX - startCoords[0], // set last coordinates
             e.offsetY - startCoords[1]
@@ -66,13 +70,37 @@ window.onload = function init()
     canvas.onmousemove = function(e)
     {
         if(!isDown) return; // don't pan if mouse is not pressed
+        if(shift!=e.shiftKey){
+            canvas.onmouseup(e);
+            canvas.onmousedown(e);
+        }
         var x = e.offsetX;
         var y = e.offsetY;
-        theta=(x - startCoords[0])/100;
-        phi=(y - startCoords[1])/100;
+        var xDiff=(x - startCoords[0])/100;
+        var yDiff=(y - startCoords[1])/100;
+        if(e.shiftKey){
+            dx=-xDiff*Math.cos(theta) - yDiff*Math.sin(theta)*Math.sin(phi);;
+            dy=yDiff*Math.cos(phi);
+            dz=xDiff*Math.sin(theta) - yDiff*Math.cos(theta)*Math.sin(phi);
+        }
+        else{
+            theta=-xDiff;
+            phi=yDiff;
+        }
+        console.log(e.shiftKey);
         render(); // render to show changes
 
     }
+
+    var panning=false;
+
+    document.addEventListener('mousewheel', function(event)
+    {
+        event.preventDefault();
+        if (event.deltaY > 0) camera.z += 0.1;
+        else camera.z -= 0.1;      
+        render();  
+    })
 
 
 };
@@ -159,10 +187,10 @@ function drawTruss(raw){
 }
 
 function render(){
-    var eye = [ Math.sin(theta)*Math.cos(phi)*camera.z,
-                Math.sin(phi)*camera.z, 
-                Math.cos(theta)*Math.cos(phi)*camera.z] ;
-    var at = [0, 0, 0];
+    var eye = [ Math.sin(theta)*Math.cos(phi)*camera.z + dx,
+                Math.sin(phi)*camera.z + dy, 
+                Math.cos(theta)*Math.cos(phi)*camera.z + dz] ;
+    var at = [dx, dy, dz];
 
     up = vec3(0.0, 1.0, 0.0);
 
