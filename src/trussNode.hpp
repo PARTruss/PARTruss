@@ -14,6 +14,12 @@ public:
 	double const getXCoord() const { return this->_coordX; }
 	double const getYCoord() const { return this->_coordY; }
 	double const getZCoord() const { return this->_coordZ; }
+	bool const getMoveX() const {return this->_moveX; }
+	bool const getMoveY() const {return this->_moveY; }
+	bool const getMoveZ() const {return this->_moveZ; }
+	bool setExtXForceIfUnset(double Fx);
+	bool setExtYForceIfUnset(double Fy);
+	bool setExtXForceIfUnset(double Fz);
 
 private:
 // Helper functions:
