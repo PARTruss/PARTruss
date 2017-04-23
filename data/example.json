@@ -5,19 +5,16 @@
 			"XYZPosition": [-0.5, -0.5, 0],
 			"XYZAppliedForces" : [0, 5.0, 0],
 			"Anchored" : [true, false, true],
-			"ExtForce" : [20, 20, 10]
 		},
 		{
 			"XYZPosition": [-0.5, 0, 0],
 			"XYZAppliedForces" : [0, 5.0, 0],
 			"Anchored" : [true, false, true],
-			"ExtForce" : [20, 20, 10]
 		},
 		{
 			"XYZPosition": [0.5, 0.5, 0],
 			"XYZAppliedForces" : [0, -10, 0],
 			"Anchored" : [true, false, true],
-			"ExtForce" : [20, 20, 10]
 		}
 	],
 	"Edges" : 
