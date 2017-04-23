@@ -77,7 +77,7 @@ bool trussNode::setExtYForceIfUnset(double Fy)
 	}
 	return false;
 }
-bool trussNode::setExtXForceIfUnset(double Fz)
+bool trussNode::setExtZForceIfUnset(double Fz)
 {
 	if (this->_extForceZ == 0)
 	{
