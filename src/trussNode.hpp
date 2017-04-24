@@ -10,7 +10,7 @@ class trussNode
 public:
 	trussNode( double x, double y, double z, 
 		bool moveX, bool moveY, bool moveZ, double Fx, double Fy, double Fz);
-	void addNeighbor( trussNode const & adj, double section, double E);
+	void addNeighbor( trussNode const & adj, double section, double E, int element_index);
 
 // Getters:
 	double const getXCoord() const { return this->_coordX; }
@@ -28,12 +28,13 @@ public:
 	bool setExtYForceIfUnset(double Fy);
 	bool setExtZForceIfUnset(double Fz);
 
-private:
 // Helper functions:
 	double const distTo( trussNode const & adj);
 	double const xProjNormTo( trussNode const & adj);
 	double const yProjNormTo( trussNode const & adj);
 	double const zProjNormTo( trussNode const & adj);
+
+private:
 
 // Representation:
 	bool _moveX;
@@ -51,4 +52,6 @@ private:
 	std::vector<double> _sections;
 	// Vector of Young's Moduli for each member
 	std::vector<double> _E;
+	// Vector of number of the member
+	std::vector<int> _elementIndices;
 };

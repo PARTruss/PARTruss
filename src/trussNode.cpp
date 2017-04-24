@@ -10,12 +10,14 @@ _moveY(moveY), _moveZ(moveZ), _extForceX(Fx), _extForceY(Fy), _extForceZ(Fz)
 	_neighbors = std::vector<trussNode>();
 	_sections = std::vector<double>();
 	_E = std::vector<double>();
+	_elementIndices = std::vector<int>();
 }
-void trussNode::addNeighbor(const trussNode & adj, double section, double E)
+void trussNode::addNeighbor(const trussNode & adj, double section, double E, int element_index)
 {
 	_neighbors.push_back(adj);
 	_sections.push_back(section);
 	_E.push_back(E);
+	_elementIndices.push_back(element_index);
 }
 
 double const trussNode::distTo( trussNode const & adj)

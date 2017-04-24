@@ -1,0 +1,1 @@
+// Class for members in a truss
