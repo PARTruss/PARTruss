@@ -4,12 +4,15 @@
 
 <script id="vertex-shader" type="x-shader/x-vertex">
 attribute vec4 vPosition;
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+
 
 void
 main()
 {
-    gl_Position = vPosition;
-    gl_PointSize = 10.0;
+	gl_Position = projectionMatrix*modelViewMatrix*vPosition;
+    gl_PointSize = 4.0*(4.0-gl_Position.z)+2.0;
 }
 </script>
 
@@ -30,8 +33,23 @@ main()
 </head>
 
 <body>
-<canvas id="gl-canvas" width="512" height="512">
-Oops ... your browser doesn't support the HTML5 canvas element
-</canvas>
+<div>
+	<input type="url" value="https://partruss.github.io/PARTruss/data/example.json" id="url">
+	<input type="submit" value="Submit" id="submit">
+</div>
+<div>
+	<input type="file" id="file">
+	<input type="submit" value="Submit" id="submit2">
+</div>
+<div>
+	<canvas id="gl-canvas" width="512" height="512">
+	Oops ... your browser doesn't support the HTML5 canvas element
+	</canvas>
+</div>
+<div>
+	Click and drag to rotate<br>
+	Shift + Click and drag to pan<br>
+	Mousewheel scroll to zoom<br>
+</div>
 </body>
 </html>
