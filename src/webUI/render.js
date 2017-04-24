@@ -104,7 +104,7 @@ window.onload = function init()
 
     var panning=false;
 
-    document.addEventListener('mousewheel', function(event)
+    document.addEventListener('wheel', function(event)
     {
         event.preventDefault();
         if (event.deltaY > 0) camera.z += 0.1;
