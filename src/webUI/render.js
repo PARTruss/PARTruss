@@ -7,10 +7,10 @@ var submit, url, submit2, file;
 
 var camera = {
     near: 0.1,
-    far: 5,
+    far: 10,
     aspect: 0.7,
-    fovAngle: 90,
-    z: 2.0
+    fovAngle: 45,
+    z: 4.0
 }
 
 var dx=0,dy=0,dz=0;
@@ -48,13 +48,16 @@ window.onload = function init()
     }
 
     var shift = false;
+
+    var lastx=0, lasty=0, lastz=0, lastTheta=0, lastPhi=0;
+
     canvas.onmousedown = function(e) {
         isDown = true;
         shift=e.shiftKey;
 
         startCoords = [
-            e.offsetX - last[0], // set start coordinates
-            e.offsetY - last[1]
+            e.offsetX , // set start coordinates
+            e.offsetY
        ];
     };
 
@@ -65,6 +68,13 @@ window.onload = function init()
             e.offsetX - startCoords[0], // set last coordinates
             e.offsetY - startCoords[1]
         ];
+
+        lasxx=dx;
+        lasty=dy;
+        lastz=dz;
+        lastTheta=theta;
+        lastPhi=phi;
+
     };
 
     canvas.onmousemove = function(e)
@@ -76,16 +86,16 @@ window.onload = function init()
         }
         var x = e.offsetX;
         var y = e.offsetY;
-        var xDiff=(x - startCoords[0])/100;
-        var yDiff=(y - startCoords[1])/100;
+        var xDiff=(x-startCoords[0])/100;
+        var yDiff=(y-startCoords[1])/100;
         if(e.shiftKey){
-            dx=-xDiff*Math.cos(theta) - yDiff*Math.sin(theta)*Math.sin(phi);;
-            dy=yDiff*Math.cos(phi);
-            dz=xDiff*Math.sin(theta) - yDiff*Math.cos(theta)*Math.sin(phi);
+            dx=lastx-xDiff*Math.cos(theta) - yDiff*Math.sin(theta)*Math.sin(phi);
+            dy=lasty+yDiff*Math.cos(phi);
+            dz=lastz+xDiff*Math.sin(theta) - yDiff*Math.cos(theta)*Math.sin(phi);
         }
         else{
-            theta=-xDiff;
-            phi=yDiff;
+            theta=lastTheta-xDiff;
+            phi=lastPhi+yDiff;
         }
         console.log(e.shiftKey);
         render(); // render to show changes
