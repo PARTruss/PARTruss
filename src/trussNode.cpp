@@ -29,32 +29,20 @@ double const trussNode::distTo( trussNode const & adj)
 double const trussNode::xProjNormTo( trussNode const & adj)
 {
 	double mag = this->distTo(adj);
-	double dx = abs( _coordX - adj.getXCoord() );
-	if ( _coordX > adj.getXCoord() )
-	{
-		return dx/mag;
-	}
-	return -1 * (dx/mag);
+	double dx = adj.getXCoord() - _coordX;
+	return dx/mag;
 }
 
 double const trussNode::yProjNormTo( trussNode const & adj)
 {
 	double mag = this->distTo(adj);
-	double dy = abs( _coordY - adj.getYCoord() );
-	if ( _coordY > adj.getYCoord() )
-	{
-		return dy/mag;
-	}
-	return -1 * (dy/mag);
+	double dy = adj.getYCoord() - _coordY;
+	return dy/mag;
 }
 
 double const trussNode::zProjNormTo( trussNode const & adj)
 {
 	double mag = this->distTo(adj);
-	double dz = abs( _coordY - adj.getYCoord() );
-	if ( _coordY > adj.getYCoord() )
-	{
-		return dz/mag;
-	}
-	return -1 * (dz/mag);
+	double dz = adj.getYCoord() - _coordY;
+	return dz/mag;
 }
