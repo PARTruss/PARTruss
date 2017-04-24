@@ -14,7 +14,7 @@ Each of these entries specifies a pin-connection for the truss structure, which 
 	{
 		"XYZPosition": [0, 0, 0],
 		"XYZAppliedForces" : [0, 5.0, 0],
-		"Anchored" : [true, false, true],
+		"Anchored" : [true, false, true]
 	},
 
 * The three __float__ values tagged by "XYZPosition" are the __x__, __y__, and __z__ coordinates of the vertex with reference to the global three-axis system used in the the simulation.
