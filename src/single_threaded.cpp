@@ -34,7 +34,13 @@ int main( int argc, char ** argv )
     std::cout << j << '\n' << '\n';
     std::vector<trussNode> vertices;
     vertices.reserve(j["vertices"].size());
+    // Aggregators for finding reaction forces:
+    double externalX = 0;
+    double externalY = 0;
+    double externalZ = 0;
+    std::vector<int> reactionVertexIndices;
     // Loop through all vertices and add them to the vector
+    int index = 0;
     for (json::iterator itr = j["Vertices"].begin(); itr != j["Vertices"].end(); itr++)
     {
         double x = (*itr)["XYZPosition"][0];
@@ -47,6 +53,16 @@ int main( int argc, char ** argv )
         double Fy =(*itr)["XYZAppliedForces"][1];
         double Fz =(*itr)["XYZAppliedForces"][2];
         vertices.push_back( trussNode(x, y, z, moveX, moveY, moveZ, Fx, Fy, Fz) );
+        // Collect all vertices that have unfilled reaction forces
+        if ( vertices.end()->getMoveX() || vertices.end()->getMoveY() || vertices.end()->getMoveZ() )
+        {
+        	reactionVertexIndices.push_back(index);
+        }
+	    // Sum the external forces in the X, Y, and Z directions:
+        externalX += vertices.end()->getExtXForce(); 
+        externalY += vertices.end()->getExtYForce();
+        externalZ += vertices.end()->getExtZForce();
+        index += 1;
     }
 
     // Now iterate over the edges and create the connections between trussNodes
@@ -60,7 +76,17 @@ int main( int argc, char ** argv )
     	vertices[e1].addNeighbor( vertices[e0], section, E );
     }
 
+    std::cout << "Total applied external forces:\n";
+    std::cout << "Fx = " << externalX << std::endl;
+    std::cout << "Fy = " << externalY << std::endl;
+    std::cout << "Fz = " << externalZ << std::endl;
+
     // Need to verify that system is statically determinate and that there are enough known external forces
+
+
+   	// Verify that the forces on "fixed" nodes correctly add up to the required support forces:
+
+
     // Then translate to matrix
     // Solve
     // Write to json

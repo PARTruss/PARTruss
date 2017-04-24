@@ -46,3 +46,31 @@ double const trussNode::zProjNormTo( trussNode const & adj)
 	double dz = adj.getYCoord() - _coordY;
 	return dz/mag;
 }
+
+bool trussNode::setExtXForceIfUnset(double Fx)
+{
+	if (this->_extForceX == 0)
+	{
+		this->_extForceX = Fx;
+		return true;
+	}
+	return false;
+}
+bool trussNode::setExtYForceIfUnset(double Fy)
+{
+	if (this->_extForceY == 0)
+	{
+		this->_extForceY = Fy;
+		return true;
+	}
+	return false;
+}
+bool trussNode::setExtZForceIfUnset(double Fz)
+{
+	if (this->_extForceZ == 0)
+	{
+		this->_extForceZ = Fz;
+		return true;
+	}
+	return false;
+}

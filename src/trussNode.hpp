@@ -11,9 +11,22 @@ public:
 	trussNode( double x, double y, double z, 
 		bool moveX, bool moveY, bool moveZ, double Fx, double Fy, double Fz);
 	void addNeighbor( trussNode const & adj, double section, double E);
+
+// Getters:
 	double const getXCoord() const { return this->_coordX; }
 	double const getYCoord() const { return this->_coordY; }
 	double const getZCoord() const { return this->_coordZ; }
+	double const getExtXForce() const { return this->_extForceX; }
+	double const getExtYForce() const { return this->_extForceY; }
+	double const getExtZForce() const { return this->_extForceZ; }
+	bool const getMoveX() const {return this->_moveX; }
+	bool const getMoveY() const {return this->_moveY; }
+	bool const getMoveZ() const {return this->_moveZ; }
+
+// Setters:
+	bool setExtXForceIfUnset(double Fx);
+	bool setExtYForceIfUnset(double Fy);
+	bool setExtZForceIfUnset(double Fz);
 
 private:
 // Helper functions:
