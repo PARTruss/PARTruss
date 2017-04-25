@@ -17,8 +17,10 @@
 #include "trussNode.hpp"
 #include <utility>
 #include <valarray>
+#include <iomanip>
 
 
+// Set dimensionality of the simulation:
 int DIMENSIONALITY = 2;
 // for convenience
 using json = nlohmann::json;
@@ -39,7 +41,15 @@ int main( int argc, char ** argv )
 	std::ifstream i(argv[1]);
     json j;
     i >> j;
-    std::cout << j << '\n' << '\n';
+    std::cout << "Vertices\n";
+    for (json::iterator i = j["Vertices"].begin(); i != j["Vertices"].end(); i++) {
+        std::cout << *i << '\n';
+    }
+    std::cout << "\nEdges\n";
+    for (json::iterator i = j["Edges"].begin(); i != j["Edges"].end(); i++) {
+        std::cout << *i << '\n';
+    }
+    std::cout << "\n\n";
     std::vector<trussNode> vertices;
     vertices.reserve(j["vertices"].size());
     // Aggregators for finding reaction forces:
@@ -140,20 +150,26 @@ int main( int argc, char ** argv )
         {
             if (edges[j].first == &vertices[v])
             {
-                matrix[v*row + j] = vertices[v].xProjNormTo(*edges[j].first);
-                matrix[(v+1)*row + j] = vertices[v].yProjNormTo(*edges[j].first);
-                matrix[(v+2)*row + j] = vertices[v].zProjNormTo(*edges[j].first);
+                matrix[DIMENSIONALITY*v*row + j] = vertices[v].xProjNormTo(*edges[j].second);
+                matrix[(DIMENSIONALITY*v+1)*row + j] = vertices[v].yProjNormTo(*edges[j].second);
+                if (DIMENSIONALITY == 3)
+                {
+                    matrix[(DIMENSIONALITY*v+2)*row + j] = vertices[v].zProjNormTo(*edges[j].second);
+                }
             }
             else if (edges[j].second == &vertices[v])
             {
-                matrix[v*row + j] = vertices[v].xProjNormTo(*edges[j].second);
-                matrix[(v+1)*row + j] = vertices[v].yProjNormTo(*edges[j].second);
-                matrix[(v+2)*row + j] = vertices[v].zProjNormTo(*edges[j].second); 
+                matrix[DIMENSIONALITY*v*row + j] = vertices[v].xProjNormTo(*edges[j].first);
+                matrix[(DIMENSIONALITY*v+1)*row + j] = vertices[v].yProjNormTo(*edges[j].first);
+                if (DIMENSIONALITY == 3)
+                {
+                    matrix[(DIMENSIONALITY*v+2)*row + j] = vertices[v].zProjNormTo(*edges[j].first); 
+                }
             }
         }
     }
 
-
+    std::cout.precision(2);
     for ( int i = 0; i < row; i++ )
     {
         for ( int j = 0; j < row; j++ )
@@ -162,5 +178,7 @@ int main( int argc, char ** argv )
         }
         std::cout << "\n";
     }
+    
+    // Now solve the linear system if possible.
 	return 0;
 }

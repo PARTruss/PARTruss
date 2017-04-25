@@ -1,4 +1,5 @@
 #include "trussNode.hpp"
+#include <iostream>
 
 // trussNode class implementation 
 
@@ -25,13 +26,14 @@ double const trussNode::distTo( trussNode const & adj)
 	double dx = _coordX - adj.getXCoord();
 	double dy = _coordY - adj.getYCoord();
 	double dz = _coordZ - adj.getZCoord();
-	return sqrt( dx*dx + dy*dy * dz*dz );
+	return sqrt( dx*dx + dy*dy + dz*dz );
 }
 
 double const trussNode::xProjNormTo( trussNode const & adj)
 {
 	double mag = this->distTo(adj);
 	double dx = adj.getXCoord() - _coordX;
+	if (mag == 0) std::cerr	<< "Zero size magnitude! Not good!\n";
 	return dx/mag;
 }
 
@@ -39,6 +41,7 @@ double const trussNode::yProjNormTo( trussNode const & adj)
 {
 	double mag = this->distTo(adj);
 	double dy = adj.getYCoord() - _coordY;
+	if (mag == 0) std::cerr	<< "Zero size magnitude! Not good!\n";
 	return dy/mag;
 }
 
@@ -46,6 +49,7 @@ double const trussNode::zProjNormTo( trussNode const & adj)
 {
 	double mag = this->distTo(adj);
 	double dz = adj.getYCoord() - _coordY;
+	if (mag == 0) std::cerr	<< "Zero size magnitude! Not good!\n";
 	return dz/mag;
 }
 
