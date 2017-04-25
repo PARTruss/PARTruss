@@ -2,20 +2,20 @@
 	"Vertices" : 
 	[
 		{
-			"XYZPosition": [-0.5, -0.5, 0],
-			"XYZAppliedForces" : [0, 5.0, 0],
-			"Anchored" : [true, false, true]
+			"XYZPosition": [ 0, 0, 0],
+			"XYZAppliedForces" : [ -5.0, -5.0, 0],
+			"Anchored" : [false, false, false]
 		},
 		{
-			"XYZPosition": [-0.5, 0, 0],
-			"XYZAppliedForces" : [0, 5.0, 0],
-			"Anchored" : [true, false, true]
+			"XYZPosition": [ 0, 1, 0],
+			"XYZAppliedForces" : [5.0, 0, 0],
+			"Anchored" : [false, false, false]
 
 		},
 		{
-			"XYZPosition": [0.5, 0.5, 0],
-			"XYZAppliedForces" : [10, -10, -10],
-			"Anchored" : [true, false, true]
+			"XYZPosition": [ 1, 0, 0],
+			"XYZAppliedForces" : [ 0, 5.0, 0],
+			"Anchored" : [false, false, false]
 		}
 	],
 	"Edges" : 
