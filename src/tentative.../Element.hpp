@@ -33,5 +33,5 @@ class Element
     static double _density = 0.284; // Hard-coded density of steel (lbs/in^3)
     static double _yieldStress = 36000;  // Hard coded stress at which material fails (psi)
     int _id = -1;   // Default invalid value
-    static int _counter = 1;
+    static int _counter = 0;
 };

@@ -37,6 +37,6 @@ private:
     std::valarray<double> _coords(3);
     std::valarray<double> _loads(3);
     bool _constrained[3];
-    static int _counter = 1;
+    static int _counter = 0;
     int _id;
 };
