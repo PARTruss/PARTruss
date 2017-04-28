@@ -17,6 +17,7 @@ class Element
     // Getters:
     Node const * const getStart() const { return this->_startNode; }
     Node const * const getEnd() const { return this->_endNode; }
+    double const * const getLocalStiffness() const { return this->_localStiffness; }
     double getWeight() const { return this->_weight; }
     int const getId() const { return this->_id; }
   
@@ -27,7 +28,7 @@ class Element
     double _sectionArea
     double _length;
     std::valarray<double> _XYZRatio(3);
-    double[36] _localStiffness;  // 6x6 local stiffness matrix (T'kT)
+    double _localStiffness[36];  // 6x6 local stiffness matrix (T'kT)
     double _youngModulus;
     double _weight;
     static double _density = 0.284; // Hard-coded density of steel (lbs/in^3)
