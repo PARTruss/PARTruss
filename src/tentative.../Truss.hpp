@@ -24,6 +24,8 @@ public:
     std::vector<Element> _elements;
     std::std::vector<Node> _nodes;
     double _totalWeight = 0.0;
+    double * _systemStiffnessMatrix = NULL;
+    int _stiffnessMatrixSize = 0;
     
     
     // Utility:

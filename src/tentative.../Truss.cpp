@@ -69,6 +69,55 @@ std::vector<double> const & Truss::solve(std::valarray<double> & Forces,
             }
         }
     }
+    // Now that the global stiffness matrix exists, save it!
+    this->_systemStiffnessMatrix = K;
+    this->_stiffnessMatrixSize = numNodes * 3;
+    // Now need to filter the stiffness matrix based on which nodes are/aren't restrained:
+    // (it's a degrees of freedom indexing vector)
+    std::vector<int> dog;
+    for (int i = 0; i < numNodes*3; i++)
+    {   
+        // Iterate over Re as a flattened matrix (vector where each group of three rows
+        // is the x,y,z restrictions on movement of that node)
+        if (!Re[i]) // If that direction is a unrestrained degree of free motion for the node, save the
+                    // value. These indices will be filters on which the system stiffness matrix
+                    // and load vector are sliced.
+        {
+            dog.push_back(i);
+        }
+    }
+    // TODO: use thrust to efficiently filter the K matrix and Ld vector (view Ld as a flattened matrix)?
+    // Entire row-columns that correspond to the axis on which a node is constrained must be dropped.
+    // Corresponding forces in restrained directions for each node in the external force matrix/vector
+    //are also to be dropped.
+    // Construct the simplified system stiffness matrix (missing entries corresponding to indices in 
+    //degrees_of_freedom matrix)
+    double * A = calloc( sizeof(double), pow(dog.size(), 2) );
+    // Vector to hold the know external forces:
+    double * f = calloc( sizeof(double), dog.size() );
+    if ( A == NULL )
+    {
+        std::cerr << "ERROR: Malloc failed to allocate memory in the truss solver member function!\n";
+        exit(EXIT_FAILURE);
+    }
+    // Copying over just the values that matter into A and f
+    for (int i = 0; i < dog.size(); i++) {
+        for (int k = 0; k < dog.size(); k++) {
+            A[IDX2C(i, j, dog.size())] = K[IDX2C(dog[i], dog[j], 3*numNodes)];
+        }
+        f[i] = Ld[dog[i]];  // This turns the 3 x numNodes matrix Ld into a filtered column vector
+    }
+    // At this point the system can now be solved for the displacement of each node!
+    // Formula is d = A\f in MATLAB, or d = A^-1 f in more mathy terms.
+    // TODO: implement solving the matrix system using CUDA or something. Should that be done in here
+    // or should A and f be stored/returned and then the solving can be done outside, perhaps
+    // in a few different ways?
+
+    // Note that indices not stored in dog have a 0 displacement for that node and coordinate direction (xyz).
+    // Then the force in each element is k( (1/L)(dx, dy, dz)dot(displacement_node_2 - displacement_node1) )
+    // Where displacement of each node is a 3-vector for the x,y,z components.
+    // At this point the changes in each location should be written back, the forces in each element should be stored,
+    // And json output should be written out.
     return NULL;
 }
 
