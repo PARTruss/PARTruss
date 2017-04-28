@@ -1,9 +1,11 @@
 #include <vector>
 #include <iostream>
 #include <json.hpp>
-#ifndef IDX2C
+#include <cstdlib>
+#ifndef IDX2C(i,j,ld)
 // Macro to map from 
 #define IDX2C(i,j,ld) (((j)*(ld))+(i))
+#endif
 
 // NOTE: Only implementing stiffness method for 2D (for now?)!
 
