@@ -24,6 +24,9 @@ public:
 	bool const getConstY() const { return this->_constrained[1]; }
 	bool const getConstZ() const { return this->_constrained[2]; }
 	
+	int const getId() const { return this->_id; }
+	void setId(int n) { this->_id = n; }
+	
 // Utility:
     bool operator==(Node const & n2);
     bool setConstraints(bool * C);

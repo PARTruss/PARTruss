@@ -15,10 +15,10 @@ class Element
     void setId(int id) { this->_id = id; }
     
     // Getters:
-    Node const * getStart() { return this->_startNode; }
-    Node const * getEnd() { return this->_endNode; }
-    double getWeight() { return this->_weight; }
-    int const getId() { return this->_id; }
+    Node const * const getStart() const { return this->_startNode; }
+    Node const * const getEnd() const { return this->_endNode; }
+    double getWeight() const { return this->_weight; }
+    int const getId() const { return this->_id; }
   
   //private:
     // Representation:
