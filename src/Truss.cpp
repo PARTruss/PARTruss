@@ -4,8 +4,14 @@
 #include <cstddef>
 #include <valarray>
 #include <cmath>
+#ifndef TRUSS
 #include "Truss.hpp"
+#define TRUSS
+#endif
+#ifndef JSON
 #include "json.hpp"
+#define JSON
+#endif
 
 using json = nlohmann::json;
 

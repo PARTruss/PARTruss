@@ -1,7 +1,10 @@
 // Implementation of class for members in a truss
 // NOTE: Only implementing stiffness method for 2D (for now?)!
 
+#ifndef ELEM
 #include "Element.hpp"
+#define ELEM
+#endif
 
 Element::Element(Node & start, Node & end, double area, double E)
 {

@@ -43,9 +43,3 @@ private:
     int _id;
 };
 
-bool nodeEqual(Node n1, Node n2 )
-{
-    return n1.getX() == n2.getX() &&
-        n1.getY() == n2.getY() &&
-        n1.getZ() == n2.getZ();
-}

@@ -1,6 +1,9 @@
 // Implementation of class for nodes in a truss 
 
+#ifndef NODE
 #include "Node.hpp"
+#define NODE
+#endif
 #include <iostream>
 
 Node::Node(double x, double y, double z)

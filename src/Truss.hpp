@@ -64,3 +64,18 @@ std::string array2string(T a)
     std::string s = ss.str();
     return s;
 }
+
+bool nodeEqual(Node n1, Node n2 )
+{
+    return n1.getX() == n2.getX() &&
+        n1.getY() == n2.getY() &&
+        n1.getZ() == n2.getZ();
+}
+
+bool elemEqual(Element & e1, Element & e2)
+{
+  return nodeEqual(*e1.getStart(), *e2.getEnd()) ||
+      nodeEqual(*e1.getStart(), *e2.getStart()) ||
+      nodeEqual(*e1.getEnd(), *e2.getEnd())  ||
+      nodeEqual(*e1.getEnd(), *e2.getStart());
+}
