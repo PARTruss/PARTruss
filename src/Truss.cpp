@@ -1,6 +1,15 @@
 // Truss class implementation
 // Note: IDX2C(i,j,ld) (((j)*(ld))+(i)) defined as shortcut for indexing into matrix
-Truss::Truss(std::vector<Element> const & Elements, std::vector<Node> const & Nodes)
+
+#include <cstddef>
+#include <valarray>
+#include <cmath>
+#include "Truss.hpp"
+#include "json.hpp"
+
+using json = nlohmann::json;
+
+Truss::Truss(std::vector<Element> & Elements, std::vector<Node> & Nodes)
 {
     // Iterate over elements and nodes and add them:
     for (int i = 0; i < Nodes.size(); i++)
@@ -24,15 +33,15 @@ Truss::Truss(std::vector<Element> const & Elements, std::vector<Node> const & No
  // This is where the magic needs to happen...
  // Very much based off of the approach in 
  // https://www.mathworks.com/matlabcentral/fileexchange/31350-truss-solver-and-genetic-algorithm-optimzer?focused=5188720&tab=function#feedbacks
-std::vector<double> const & Truss::solve(std::valarray<double> & Forces, 
-    std::valarray<double> & Displacements, std::vector<double> & DCs )   
+std::vector<double *> Truss::solve(std::valarray<double> & Forces, 
+    std::valarray<double> & Displacements )   
 {
     int numNodes = this->_nodes.size();
     int numEdges = this->_elements.size();
     // Allocate a bunch of arrays:
-    double* K = calloc( sizeof(double), pow(numNodes * 3, 2) ); // Global stiffness matrix
-    bool* Re = calloc( sizeof(bool), numNodes * 3 );          // All restraints on each node 
-    double* Ld = calloc( sizeof(double), numNodes * 3 );        // All loads on each node
+    double* K = (double*)calloc( sizeof(double), pow(numNodes * 3, 2) ); // Global stiffness matrix
+    bool* Re = (bool*)calloc( sizeof(bool), numNodes * 3 );          // All restraints on each node 
+    double* Ld = (double*)calloc( sizeof(double), numNodes * 3 );        // All loads on each node
     if ( K == NULL || Re == NULL || Ld == NULL )
     {
         std::cerr << "ERROR: Malloc failed to allocate memory in the truss solver member function!\n";
@@ -42,12 +51,12 @@ std::vector<double> const & Truss::solve(std::valarray<double> & Forces,
     for ( int i = 0 ; i < this->_nodes.size(); i ++ )
     {
         int nodeId = this->_nodes[i].getId();   // Note that node numbering starts at 0, not 1 
-        Re[IDX2C(nodeId, 0, numNodes)] = this->_nodes.getConstX();
-        Re[IDX2C(nodeId, 1, numNodes)] = this->_nodes.getConstY();
-        Re[IDX2C(nodeId, 2, numNodes)] = this->_nodes.getConstZ();
-        Ld[IDX2C(nodeId, 0, numNodes)] = this->_nodes.getLoadX();
-        Ld[IDX2C(nodeId, 1, numNodes)] = this->_nodes.getLoadY();
-        Ld[IDX2C(nodeId, 2, numNodes)] = this->_nodes.getLoadZ();
+        Re[IDX2C(nodeId, 0, numNodes)] = this->_nodes[i].getConstX();
+        Re[IDX2C(nodeId, 1, numNodes)] = this->_nodes[i].getConstY();
+        Re[IDX2C(nodeId, 2, numNodes)] = this->_nodes[i].getConstZ();
+        Ld[IDX2C(nodeId, 0, numNodes)] = this->_nodes[i].getLoadX();
+        Ld[IDX2C(nodeId, 1, numNodes)] = this->_nodes[i].getLoadY();
+        Ld[IDX2C(nodeId, 2, numNodes)] = this->_nodes[i].getLoadZ();
     }
     // Now for each element, add its global-coordinate stiffness matrix to the system matrix K
     // The locations where each quadrant of the element matrix fit into the system matrix
@@ -58,11 +67,11 @@ std::vector<double> const & Truss::solve(std::valarray<double> & Forces,
         int node2 = this->_elements[i].getEnd()->getId();
                         // Indices based on first node...and second node
         int indices[6] = { 3*node1, 3*node1+1, 3*node1+2, 3*node2, 3*node2+1, 3*node2+2 };
-        double * local_stiffness = this->_elements[i].getLocalStiffness();
+        const double * local_stiffness = this->_elements[i].getLocalStiffness();
         // NOTE: Node numbering starts at 0; hence why the indexing above works.
-        for (j = 0; j < 6; j ++ )
+        for (int j = 0; j < 6; j ++ )
         {
-            for (k = 0; k < 6; k++ )
+            for (int k = 0; k < 6; k++ )
             {
                 // Add the values from the element's stiffness matrix onto the global matrix
                 K[IDX2C(indices[j], indices[k], numNodes*3)] += local_stiffness[IDX2C(j, k, 6)];
@@ -92,9 +101,9 @@ std::vector<double> const & Truss::solve(std::valarray<double> & Forces,
     //are also to be dropped.
     // Construct the simplified system stiffness matrix (missing entries corresponding to indices in 
     //degrees_of_freedom matrix)
-    double * A = calloc( sizeof(double), pow(dog.size(), 2) );
+    double * A = (double*)calloc( sizeof(double), pow(dog.size(), 2) );
     // Vector to hold the know external forces:
-    double * f = calloc( sizeof(double), dog.size() );
+    double * f = (double*)calloc( sizeof(double), dog.size() );
     if ( A == NULL )
     {
         std::cerr << "ERROR: Malloc failed to allocate memory in the truss solver member function!\n";
@@ -103,7 +112,7 @@ std::vector<double> const & Truss::solve(std::valarray<double> & Forces,
     // Copying over just the values that matter into A and f
     for (int i = 0; i < dog.size(); i++) {
         for (int k = 0; k < dog.size(); k++) {
-            A[IDX2C(i, j, dog.size())] = K[IDX2C(dog[i], dog[j], 3*numNodes)];
+            A[IDX2C(i, k, dog.size())] = K[IDX2C(dog[i], dog[k], 3*numNodes)];
         }
         f[i] = Ld[dog[i]];  // This turns the 3 x numNodes matrix Ld into a filtered column vector
     }
@@ -118,15 +127,43 @@ std::vector<double> const & Truss::solve(std::valarray<double> & Forces,
     // Where displacement of each node is a 3-vector for the x,y,z components.
     // At this point the changes in each location should be written back, the forces in each element should be stored,
     // And json output should be written out.
-    return NULL;
+    std::vector<double *> systemEqns = { A, f };
+    return systemEqns;
 }
 
-std::ostream Truss::outputJSON()
+void Truss::outputJSON(std::ostream & f)
 {
     // This needs to output JSON stuff...
     // Go through each node and output it in json formatted goodness
     // Go through each vertex and output it in json format
-    return NULL;
+    int numNodes = this->_nodes.size();
+    int numEdges = this->_elements.size();
+    json j;
+    std::string vertices = "[";
+    for (int i = 0; i < numNodes; i++)
+    {
+        vertices += "{\"XYZPosition\": " +  array2string(this->_nodes[i].getCoords());
+        vertices += ", \"XYZAppliedForces\": " + array2string(this->_nodes[i].getLoads());
+        vertices += ", \"Anchored\": " + array2string(this->_nodes[i].getConstraints() ) + "}";
+        if ( i < numNodes - 1) { vertices += ", "; }
+    }
+    j["Vertices"] = json::parse(vertices);
+    
+    std::string edges = "[";
+    for (int i = 0; i < numEdges; i++)
+    {
+        std::array<int,2> endpoints = {this->_elements[i].getStart()->getId(), this->_elements[i].getEnd()->getId()};
+        edges += "{\"Endpoints\": " + array2string(endpoints);
+    	edges += ", \"ElasticModulus\": " +  std::to_string(this->_elements[i].getMod());
+    	edges += ", \"SectionArea\": " + std::to_string(this->_elements[i].getArea());  /*,
+    	I think we need to compute these still..
+    	edges += ", \"Force\": ", array2string(this->_elements[i]->???);,
+    	edges += ", \"Stress\": " + this->_elements[i]->???;*/
+        if ( i < numEdges - 1) { edges += ", "; }
+    }
+    j["Edges"] = json::parse(edges);
+    
+    f << j;
 }
 
 
@@ -135,14 +172,13 @@ bool Truss::addNode( Node & n )
     bool alreadyExists = false;
     for ( int i = 0; i < this->_nodes.size(); i++ )
     {
-        alreadyExists |= ( n == this->_nodes[i]);
+        alreadyExists |= (n.operator==(this->_nodes[i] ));
     }
     if ( alreadyExists ){
         std::cerr << "Error: this node has already been added to the truss. Skipping!\n";
         return false;
     }
     _nodes.push_back(n);
-    n.setId()
     return true;
 }
 
@@ -151,7 +187,7 @@ bool Truss::addElement( Element & e )
     bool alreadyExists = false;
     for ( int i = 0; i < this->_elements.size(); i++ )
     {
-        alreadyExists |= ( e == this->_elements[i]);
+        alreadyExists |= (e.operator==(this->_elements[i]));
     }
     if ( alreadyExists ){
         std::cerr << "Error: this element has already been added to the truss. Skipping!\n";
@@ -160,3 +196,4 @@ bool Truss::addElement( Element & e )
     _elements.push_back(e);
     return true;   
 }
+

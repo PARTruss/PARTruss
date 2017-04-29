@@ -1,21 +1,25 @@
 // Implementation of class for nodes in a truss 
 
-Node(double x, double y, double z)
+#include "Node.hpp"
+#include <iostream>
+
+Node::Node(double x, double y, double z)
 {
-    this->_coords = std::valarray(3);
+    this->_coords = std::valarray<double>(3);
     this->_coords[0] = x;
     this->_coords[1] = y;
     this->_coords[2] = z;
-    this->id = (this->_counter++);
 }
 
-bool Node::operator==( Node const & n2 )
+bool Node::operator==(Node const & n2)
 {
     // If a node has the same coords as another, they are equivalent
-    return this->_coords == n2.getCoords();
+    return (this->_coords[0] == n2.getX() &&
+        this->_coords[1] == n2.getY() &&
+        this->_coords[2] == n2.getZ());
 }
 
-bool Node::setLoad(double * P)
+bool Node::setLoad(std::valarray<double> & P)
 {
     bool fail = false;
     for (int i = 0; i < 3; i ++)
@@ -27,13 +31,13 @@ bool Node::setLoad(double * P)
     	else if (P[i] > 0)
     	{
     	    fail=true;
-	    	std::cerr << "Can't set a vertex load where there is a constraint.\n"
+	    	std::cerr << "Can't set a vertex load where there is a constraint.\n";
         }
     }
 	return !fail;
 }
 
-bool Node::setConstraints(bool * C)
+bool Node::setConstraints(std::valarray<bool> & C)
 {
     bool fail = false;
     for (int i = 0; i < 3; i ++)
@@ -45,7 +49,7 @@ bool Node::setConstraints(bool * C)
     	else if (C[i])
     	{
     	    fail=true;
-	    	std::cerr << "Can't set a vertex load where there is a constraint.\n"
+	    	std::cerr << "Can't set a vertex load where there is a constraint.\n";
         }
     }
 	return !fail;
