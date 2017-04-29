@@ -172,7 +172,7 @@ bool Truss::addNode( Node & n )
     bool alreadyExists = false;
     for ( int i = 0; i < this->_nodes.size(); i++ )
     {
-        alreadyExists |= (n.operator==(this->_nodes[i] ));
+        alreadyExists |= nodeEqual(n, this->_nodes[i] );
     }
     if ( alreadyExists ){
         std::cerr << "Error: this node has already been added to the truss. Skipping!\n";
@@ -187,7 +187,7 @@ bool Truss::addElement( Element & e )
     bool alreadyExists = false;
     for ( int i = 0; i < this->_elements.size(); i++ )
     {
-        alreadyExists |= (e.operator==(this->_elements[i]));
+        alreadyExists |= elemEqual(this->_elements[i], e);
     }
     if ( alreadyExists ){
         std::cerr << "Error: this element has already been added to the truss. Skipping!\n";

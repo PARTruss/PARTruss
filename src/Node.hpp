@@ -32,7 +32,6 @@ public:
 	void setId(int n) { this->_id = n; }
 	
 // Utility:
-    bool operator==(Node const & n2);
     bool setConstraints(std::valarray<bool> &  C);
     bool setLoad(std::valarray<double> & P);
 
@@ -43,3 +42,10 @@ private:
     std::valarray<bool> _constrained = std::valarray<bool>(3);
     int _id;
 };
+
+bool nodeEqual(Node n1, Node n2 )
+{
+    return n1.getX() == n2.getX() &&
+        n1.getY() == n2.getY() &&
+        n1.getZ() == n2.getZ();
+}

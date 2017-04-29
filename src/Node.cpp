@@ -11,14 +11,6 @@ Node::Node(double x, double y, double z)
     this->_coords[2] = z;
 }
 
-bool Node::operator==(Node const & n2)
-{
-    // If a node has the same coords as another, they are equivalent
-    return (this->_coords[0] == n2.getX() &&
-        this->_coords[1] == n2.getY() &&
-        this->_coords[2] == n2.getZ());
-}
-
 bool Node::setLoad(std::valarray<double> & P)
 {
     bool fail = false;

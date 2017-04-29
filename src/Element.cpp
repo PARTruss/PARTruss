@@ -2,7 +2,6 @@
 // NOTE: Only implementing stiffness method for 2D (for now?)!
 
 #include "Element.hpp"
-#include "Node.cpp"
 
 Element::Element(Node & start, Node & end, double area, double E)
 {
@@ -49,10 +48,4 @@ Element::Element(Node & start, Node & end, double area, double E)
         }
     }
     double _yieldStress;  // Stress at which material fails
-}
-
-bool Element::operator==(Element const & e2)
-{
-    return ( this->_startNode == e2.getStart() && this->_endNode == e2.getEnd()
-        || this->_startNode == e2.getEnd() && this->_endNode == e2.getStart() );
 }

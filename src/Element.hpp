@@ -18,9 +18,6 @@ class Element
     // Constructor:
     Element(Node &, Node &, double, double);
     
-    // Utility:
-    bool operator==(Element const & e2);
-    
     // Setter:
     void setId(int id) { this->_id = id; }
     
@@ -48,3 +45,11 @@ class Element
     constexpr static double _yieldStress = 36000;  // Hard coded stress at which material fails (psi)
     int _id = -1;   // Default invalid value
 };
+
+bool elemEqual(Element & e1, Element & e2)
+{
+  return nodeEqual(*e1.getStart(), *e2.getEnd()) ||
+      nodeEqual(*e1.getStart(), *e2.getStart()) ||
+      nodeEqual(*e1.getEnd(), *e2.getEnd())  ||
+      nodeEqual(*e1.getEnd(), *e2.getStart());
+}
