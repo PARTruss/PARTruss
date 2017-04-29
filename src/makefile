@@ -2,11 +2,17 @@ CXX = clang
 CXXLINKER = g++
 CXXFLAGS = --std=c++11
 
-trussNode.o: trussNode.cpp
-	$(CXX) $(CXXFLAGS) -c trussNode.cpp trussNode.hpp
+Truss.o: Truss.cpp Truss.hpp
+	$(CXX) $(CXXFLAGS) -c Truss.cpp Truss.hpp
+	
+Node.o: Node.cpp Node.hpp
+	$(CXX) $(CXXFLAGS) -c Node.cpp Node.hpp
 
-single_threaded.o: single_threaded.cpp json.hpp
-	$(CXX) $(CXXFLAGS) -c single_threaded.cpp
+Element.o: Element.cpp Element.hpp
+	$(CXX) $(CXXFLAGS) -c Element.cpp Element.hpp
+	
+main.o: main.cpp json.hpp
+	$(CXX) $(CXXFLAGS) -c main.cpp
 
-main: single_threaded.o trussNode.o
-	$(CXXLINKER) $(CXXFLAGS) -o main trussNode.o single_threaded.o
+main: main.o Truss.o Node.o Element.o
+	$(CXXLINKER) $(CXXFLAGS) -o main Truss.o Node.o Element.o main.o
