@@ -15,6 +15,21 @@
 
 using json = nlohmann::json;
 
+bool nodeEqual(Node n1, Node n2 )
+{
+    return n1.getX() == n2.getX() &&
+        n1.getY() == n2.getY() &&
+        n1.getZ() == n2.getZ();
+}
+
+bool elemEqual(Element & e1, Element & e2)
+{
+  return ( nodeEqual(*e1.getStart(), *e2.getEnd()) &&
+        nodeEqual(*e1.getEnd(), *e2.getStart()) ) ||
+      ( nodeEqual(*e1.getStart(), *e2.getStart()) &&
+      nodeEqual(*e1.getEnd(), *e2.getEnd()) );
+}
+
 Truss::Truss(std::vector<Element> & Elements, std::vector<Node> & Nodes)
 {
     // Iterate over elements and nodes and add them:
@@ -153,6 +168,7 @@ void Truss::outputJSON(std::ostream & f)
         vertices += ", \"Anchored\": " + array2string(this->_nodes[i].getConstraints() ) + "}";
         if ( i < numNodes - 1) { vertices += ", "; }
     }
+    vertices += "]";
     j["Vertices"] = json::parse(vertices);
     
     std::string edges = "[";
@@ -161,12 +177,13 @@ void Truss::outputJSON(std::ostream & f)
         std::array<int,2> endpoints = {this->_elements[i].getStart()->getId(), this->_elements[i].getEnd()->getId()};
         edges += "{\"Endpoints\": " + array2string(endpoints);
     	edges += ", \"ElasticModulus\": " +  std::to_string(this->_elements[i].getMod());
-    	edges += ", \"SectionArea\": " + std::to_string(this->_elements[i].getArea());  /*,
+    	edges += ", \"SectionArea\": " + std::to_string(this->_elements[i].getArea()) + "}";  /*,
     	I think we need to compute these still..
     	edges += ", \"Force\": ", array2string(this->_elements[i]->???);,
     	edges += ", \"Stress\": " + this->_elements[i]->???;*/
         if ( i < numEdges - 1) { edges += ", "; }
     }
+    edges += "]";
     j["Edges"] = json::parse(edges);
     
     f << j;

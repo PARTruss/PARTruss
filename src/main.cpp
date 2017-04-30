@@ -61,7 +61,7 @@ int main( int argc, char ** argv )
     json j;
     i >> j;
     
-#if DEBUG > 3
+#if DEBUG > 2
     std::cout << "Vertices\n";
     for (json::iterator i = j["Vertices"].begin(); i != j["Vertices"].end(); i++) {
         std::cout << *i << '\n';
@@ -109,6 +109,10 @@ int main( int argc, char ** argv )
     // Then translate to Truss
     
     Truss t = Truss(edges,vertices);
+    
+#if DEBUG > 3
+    json tmp = t.outputJSON(std::cout);
+#endif
     
     // Solve
     // Write to json
