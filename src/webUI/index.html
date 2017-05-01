@@ -2,27 +2,82 @@
 <html>
 <head>
 
-<script id="vertex-shader" type="x-shader/x-vertex">
+<script id="node-vertex-shader" type="x-shader/x-vertex">
 attribute vec4 vPosition;
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
-
 
 void
 main()
 {
 	gl_Position = projectionMatrix*modelViewMatrix*vPosition;
-    gl_PointSize = 4.0*(4.0-gl_Position.z)+2.0;
+    gl_PointSize = 50.0/(gl_Position.z+1.0);
 }
 </script>
 
-<script id="fragment-shader" type="x-shader/x-fragment">
+<script id="node-fragment-shader" type="x-shader/x-fragment">
 precision mediump float;
 
 void
 main()
 {
     gl_FragColor = vec4( 1.0, 1.0, 1.0, 1.0 );
+}
+</script>
+
+<script id="edge-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 vPosition;
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+attribute float hue;
+varying vec4 fcolor;
+
+vec4 hsv_to_rgb(float h, float s, float v, float a){
+    //HSV to RGB algorithm courtesy of https://gist.github.com/eieio/4109795
+    float c = v * s;
+    h = mod((h * 6.0), 6.0);
+    float x = c * (1.0 - abs(mod(h, 2.0) - 1.0));
+    vec4 color;
+
+    if (0.0 <= h && h < 1.0) {
+        color = vec4(c, x, 0.0, a);
+    } else if (1.0 <= h && h < 2.0) {
+        color = vec4(x, c, 0.0, a);
+    } else if (2.0 <= h && h < 3.0) {
+        color = vec4(0.0, c, x, a);
+    } else if (3.0 <= h && h < 4.0) {
+        color = vec4(0.0, x, c, a);
+    } else if (4.0 <= h && h < 5.0) {
+        color = vec4(x, 0.0, c, a);
+    } else if (5.0 <= h && h < 6.0) {
+        color = vec4(c, 0.0, x, a);
+    } else {
+        color = vec4(0.0, 0.0, 0.0, a);
+    }
+
+    color.rgb += v - c;
+
+    return color;
+}
+
+void
+main()
+{
+	gl_Position = projectionMatrix*modelViewMatrix*vPosition;
+    gl_PointSize = 0.0;
+    fcolor = hsv_to_rgb(hue+2.0/3.0, 1.0, 1.0, 1.0);
+}
+</script>
+
+<script id="edge-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+varying vec4 fcolor;
+
+void
+main()
+{
+    //gl_FragColor = vec4( 1.0, 1.0, 1.0, 1.0 );
+    gl_FragColor = fcolor;
 }
 </script>
 
@@ -34,13 +89,15 @@ main()
 
 <body>
 <div>
-	<input type="url" value="https://partruss.github.io/PARTruss/data/example.json" id="url">
+	<input type="url" value="/data/example.json" id="url">
 	<input type="submit" value="Submit" id="submit">
 </div>
+<!--
 <div>
 	<input type="file" id="file">
 	<input type="submit" value="Submit" id="submit2">
 </div>
+-->
 <div>
 	<canvas id="gl-canvas" width="512" height="512">
 	Oops ... your browser doesn't support the HTML5 canvas element

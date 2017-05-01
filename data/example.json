@@ -30,14 +30,14 @@
 			"Endpoints": [ 1, 2 ],
 			"ElasticModulus": 0.0,
 			"SectionArea": 0.25,
-			"Force" : 0.0,
+			"Force" : 0.33,
 			"Stress" : 0.0
 		},
 		{
 			"Endpoints": [ 2, 0 ],
 			"ElasticModulus": 0.0,
 			"SectionArea": 0.25,
-			"Force" : 0.0,
+			"Force" : 0.66,
 			"Stress" : 0.0
 		}
 	]
