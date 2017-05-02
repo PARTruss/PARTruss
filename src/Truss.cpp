@@ -105,7 +105,7 @@ bool Truss::solve()
     this->_stiffnessMatrixSize = numNodes * 3;
     // Now need to filter the stiffness matrix based on which nodes are/aren't restrained:
     // (it's a degrees of freedom indexing vector)
-    std::vector<int> dog;
+    std::vector<int> dof;
     for (int i = 0; i < numNodes*3; i++)
     {   
         // Iterate over Re as a flattened matrix (vector where each group of three rows
@@ -114,7 +114,7 @@ bool Truss::solve()
                     // value. These indices will be filters on which the system stiffness matrix
                     // and load vector are sliced.
         {
-            dog.push_back(i);
+            dof.push_back(i);
         }
     }
     // TODO: use thrust or something to efficiently filter the K matrix and Ld vector (view Ld as a flattened matrix)?
@@ -123,26 +123,26 @@ bool Truss::solve()
     //are also to be dropped.
     // Construct the simplified system stiffness matrix (missing entries corresponding to indices in 
     //degrees_of_freedom matrix)
-    double * A = (double*)calloc( sizeof(double), pow(dog.size(), 2) );
+    double * A = (double*)calloc( sizeof(double), pow(dof.size(), 2) );
     // Vector to hold the know external forces:
-    double * f = (double*)calloc( sizeof(double), dog.size() );
+    double * f = (double*)calloc( sizeof(double), dof.size() );
     // Vector to hold the solved displacements of moveable nodes
-    double * d = (double*)calloc( sizeof(double), dog.size() );
+    double * d = (double*)calloc( sizeof(double), dof.size() );
     if ( A == NULL || f == NULL || d == NULL )
     {
         std::cerr << "ERROR: Malloc failed to allocate memory in the truss solver member function!\n";
         return false;
     }
     // Copying over just the values that matter into A and f
-    for (int i = 0; i < dog.size(); i++) {
-        for (int k = 0; k < dog.size(); k++) {
-            A[IDX2C(i, k, dog.size())] = K[IDX2C(dog[i], dog[k], 3*numNodes)];
+    for (int i = 0; i < dof.size(); i++) {
+        for (int k = 0; k < dof.size(); k++) {
+            A[IDX2C(i, k, dof.size())] = K[IDX2C(dof[i], dof[k], 3*numNodes)];
         }
-        f[i] = Ld[dog[i]];  // This turns the 3 x numNodes matrix Ld into a filtered column vector
+        f[i] = Ld[dof[i]];  // This turns the 3 x numNodes matrix Ld into a filtered column vector
     }
     // At this point the system can now be solved for the displacement of each node!
     // Formula is d = A\f in MATLAB, or d = A^-1 f in more mathy terms.
-    if ( solveMatrix( A, dog.size(), f, d ) != 0 )
+    if ( solveMatrix( A, dof.size(), f, d ) != 0 )
     {
       std::cerr << "ERROR: Call to CuSolve in truss solve member function failed!\n";
       return false;
@@ -154,10 +154,10 @@ bool Truss::solve()
       std::cerr << "ERROR: could not allocate memory for full displacement vector.\n";
       return false;
     }
-    for ( int i = 0; i < dog.size(); i++ )
+    for ( int i = 0; i < dof.size(); i++ )
     {
       // All other displacements are 0, implicitly by calloc
-      D[dog[i]] = d[i];
+      D[dof[i]] = d[i];
     }
     // Update all nodes with their respective displacements:
     for ( int i = 0; i < numNodes; i++ )
@@ -171,7 +171,7 @@ bool Truss::solve()
       int elemId = this->_elements[i].getId();
       // TODO: Finish here...
     }
-    // Note that indices not stored in dog have a 0 displacement for that node and coordinate direction (xyz).
+    // Note that indices not stored in dof have a 0 displacement for that node and coordinate direction (xyz).
     // Then the force in each element is k( (1/L)(dx, dy, dz)dot(displacement_node_2 - displacement_node1) )
     // Where displacement of each node is a 3-vector for the x,y,z components.
     // At this point the changes in each location should be written back, the forces in each element should be stored,
