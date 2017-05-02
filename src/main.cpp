@@ -110,12 +110,20 @@ int main( int argc, char ** argv )
     
     Truss t = Truss(edges,vertices);
     
+    // Solve
+    if ( t.solve() )
+    {
+      std::cout << "WOO! Truss has been solved!\n";
+    }
+    else
+    {
+      std::cerr << "ERROR: Something went wrong in solving the truss :(\n";
+    }
+    // Write to json  
 #if DEBUG > 3
     json tmp = t.outputJSON(std::cout);
 #endif
-    
-    // Solve
-    // Write to json
-    // Make available to the webgl renderer
+
+    // Make available to the webgl renderer??
 	return 0;
 }

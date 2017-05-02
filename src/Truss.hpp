@@ -29,7 +29,7 @@ class Truss
 {
 public:
     Truss(std::vector<Element> & , std::vector<Node> & );
-    std::vector<double *> solve(std::valarray<double> & Forces, std::valarray<double> & Displacements );
+    bool solve();
     void outputJSON(std::ostream & f);    // Output the solved json version to be visualized
     
 // Getters:
