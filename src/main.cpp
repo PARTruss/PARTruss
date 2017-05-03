@@ -99,8 +99,8 @@ int main( int argc, char ** argv )
     // Now iterate over the edges and create the connections between trussNodes
     for (json::iterator itr = j["Edges"].begin(); itr != j["Edges"].end(); itr++)
     {
- 		int e0 =(*itr)["Endpoints"][0];
- 		int e1 =(*itr)["Endpoints"][1];
+ 	int e0 =(*itr)["Endpoints"][0];
+ 	int e1 =(*itr)["Endpoints"][1];
     	double E =(*itr)["ElasticModulus"];
     	double section =(*itr)["SectionArea"];
     	Element e = Element(vertices[e0], vertices[e1], section, E);
