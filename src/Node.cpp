@@ -12,6 +12,7 @@ Node::Node(double x, double y, double z)
     this->_coords[0] = x;
     this->_coords[1] = y;
     this->_coords[2] = z;
+    this->_id = 0;
 }
 
 bool Node::setLoad(std::valarray<double> & P)

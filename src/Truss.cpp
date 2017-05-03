@@ -39,7 +39,7 @@ Truss::Truss(std::vector<Element> & Elements, std::vector<Node> & Nodes)
     {
         if (this->addNode(Nodes[i]))
         {
-            Nodes[i].setId(i);
+            this->_nodes[this->_nodes.size()-1].setId(i);
         }
     }
     
@@ -47,7 +47,7 @@ Truss::Truss(std::vector<Element> & Elements, std::vector<Node> & Nodes)
     {
         if (this->addElement(Elements[i]))
         {
-            Elements[i].setId(i);
+            this->_elements[this->_elements.size()-1].setId(i);
             // _totalWeight += Elements[i].getWeight();
         }
     }
@@ -70,9 +70,11 @@ bool Truss::solve()
         return false;
     }
     // Populate the load and restraint matrices from the nodes:
-    for ( int i = 0 ; i < this->_nodes.size(); i ++ )
+    for ( int i = 0 ; i < numNodes; i ++ )
     {
-        int nodeId = this->_nodes[i].getId();   // Note that node numbering starts at 0, not 1 
+        int nodeId = this->_nodes[i].getId();   // Note that node numbering starts at 0, not 1
+        std::cout << "Node id: " << nodeId << "\n";
+        std::cout << "Farthest index: "<<IDX2C(nodeId, 2, numNodes) << "\n";
         Re[IDX2C(nodeId, 0, numNodes)] = this->_nodes[i].getConstX();
         Re[IDX2C(nodeId, 1, numNodes)] = this->_nodes[i].getConstY();
         Re[IDX2C(nodeId, 2, numNodes)] = this->_nodes[i].getConstZ();
@@ -83,7 +85,7 @@ bool Truss::solve()
     // Now for each element, add its global-coordinate stiffness matrix to the system matrix K
     // The locations where each quadrant of the element matrix fit into the system matrix
     //are based on the indices of the nodes at each end of the element.
-    for (int i = 0; i < this->_elements.size(); i++)
+    for (int i = 0; i < numEdges; i++)
     {             
         int node1 = this->_elements[i].getStart()->getId();
         int node2 = this->_elements[i].getEnd()->getId();
@@ -230,6 +232,7 @@ bool Truss::addNode( Node & n )
         return false;
     }
     _nodes.push_back(n);
+    std::cout << "Node addition successful.\n";
     return true;
 }
 
