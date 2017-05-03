@@ -3,18 +3,18 @@
 	[
 		{
 			"XYZPosition": [-0.5, -0.5, 0],
-			"XYZAppliedForces" : [0, 5.0, 0],
-			"Anchored" : [true, false, true]
+			"XYZAppliedForces" : [0, 0.0, 0],
+			"Anchored" : [true, true, true]
 		},
 		{
 			"XYZPosition": [-0.5, 0, 0],
-			"XYZAppliedForces" : [0, 5.0, 0],
-			"Anchored" : [true, false, true]
+			"XYZAppliedForces" : [0, 0.0, 0],
+			"Anchored" : [true, true, true]
 		},
 		{
 			"XYZPosition": [0.5, 0.5, 0],
-			"XYZAppliedForces" : [0, -10, 0],
-			"Anchored" : [true, false, true]
+			"XYZAppliedForces" : [20, -10, 0],
+			"Anchored" : [false, false, true]
 		}
 	],
 	"Edges" : 
