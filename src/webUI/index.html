@@ -65,7 +65,7 @@ main()
 {
 	gl_Position = projectionMatrix*modelViewMatrix*vPosition;
     gl_PointSize = 0.0;
-    fcolor = hsv_to_rgb(hue+2.0/3.0, 1.0, 1.0, 1.0);
+    fcolor = hsv_to_rgb(hue, 1.0, 1.0, 1.0);
 }
 </script>
 
@@ -104,9 +104,12 @@ main()
 	</canvas>
 </div>
 <div>
-	Click and drag to rotate<br>
-	Shift + Click and drag to pan<br>
-	Mousewheel scroll to zoom<br>
+	<div style="float:left;">
+		Click and drag to rotate<br>
+		Shift + Click and drag to pan<br>
+		Mousewheel scroll to zoom<br>
+	</div>
+	<div id="scaleData" style="float:left; padding-left:10px;"/>
 </div>
 </body>
 </html>
