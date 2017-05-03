@@ -5,6 +5,7 @@ import json
 
 if len(sys.argv) < 3:
 	print("USAGE: {} truss_repetitions output_filename.json".format(sys.argv[0]))
+        sys.exit(1)
 # Number of adjacent truss sections that will be created and connected
 num_repetitions = int(sys.argv[1])
 
@@ -29,8 +30,9 @@ for i in range(num_repetitions):
 		edge = { 'Endpoints':conn, 'ElasticModulus':ElasticModulus, 'SectionArea':SectionArea, 'Force':0.0, 'Stress':0.0 }
 		json_to_dump['Edges'].append(edge)
 
+json_str = json.dumps(json_to_dump, indent=4, sort_keys=True)
 with open(sys.argv[2], 'w') as f:
-	json.dump(json_to_dump, f)
+	f.write(json_str)
 	f.close()
 
 # Tesselate 2D triangles?:
