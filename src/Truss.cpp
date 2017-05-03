@@ -1,5 +1,5 @@
 // Truss class implementation
-// Note: IDX2C(i,j,ld) (((j)*(ld))+(i)) defined in header as shortcut for indexing into matrix
+// Note: IDX2C(i,j,ld) (((i)*(ld))+(j)) defined in header as shortcut for indexing into matrix
 
 #include <iostream>
 #include <fstream>
@@ -77,13 +77,17 @@ bool Truss::solve()
     {
         int nodeId = this->_nodes[i].getId();   // Note that node numbering starts at 0, not 1
         std::cout << "Node id: " << nodeId << "\n";
-        std::cout << "Farthest index: "<<IDX2C(nodeId, 3, numNodes) << "\n";
+        std::cout << "Farthest index: "<<IDX2C(nodeId, 2, numNodes) << "\n";
         Re[IDX2C(nodeId, 0, numNodes)] = this->_nodes[i].getConstX();
         Re[IDX2C(nodeId, 1, numNodes)] = this->_nodes[i].getConstY();
         Re[IDX2C(nodeId, 2, numNodes)] = this->_nodes[i].getConstZ();
         Ld[IDX2C(nodeId, 0, numNodes)] = this->_nodes[i].getLoadX();
         Ld[IDX2C(nodeId, 1, numNodes)] = this->_nodes[i].getLoadY();
         Ld[IDX2C(nodeId, 2, numNodes)] = this->_nodes[i].getLoadZ();
+        std::cout << "Node " << i << " constraints:\n";
+        std::cout << Re[IDX2C(nodeId, 0, numNodes)] << std::endl;
+        std::cout << Re[IDX2C(nodeId, 1, numNodes)] << std::endl;
+        std::cout << Re[IDX2C(nodeId, 2, numNodes)] << std::endl;
     }
     // Now for each element, add its global-coordinate stiffness matrix to the system matrix K
     // The locations where each quadrant of the element matrix fit into the system matrix
@@ -168,11 +172,16 @@ bool Truss::solve()
         std::cout << "\n";
         //f[i] = Ld[dof[i]];  // This turns the 3 x numNodes matrix Ld into a filtered column vector
     }
+    for (int i = 0; i < dof.size(); i++) {
+        std::cout << f[i];
+    }
     // At this point the system can now be solved for the displacement of each node!
     // Formula is d = A\f in MATLAB, or d = A^-1 f in more mathy terms.
-    if ( solveMatrix( A, dof.size(), f, d ) != 0 )
+    int cuda_status = solveMatrix( A, dof.size(), f, d );
+    if ( cuda_status != 0 )
     {
       std::cerr << "ERROR: Call to CuSolve in truss solve member function failed!\n";
+      std::cerr << "\tReturn value: " << cuda_status << std::endl;
       return false;
     }
     // Now expand the total displacement matrix:
