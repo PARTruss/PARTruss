@@ -33,11 +33,19 @@ int solveMatrix(double *A_in, int n, double *b_in, double *x_out){
     return 1;
     cusolverDnDestroy(handle);
   }
+  if(devInfo!=0){
+    return devInfo;
+    cusolverDnDestroy(handle);
+  }
   status = cusolverDnDgetrs(handle, CUBLAS_OP_T, n, 1, A, n, devIpiv, b, n, &devInfo );
   cudaDeviceSynchronize();
   if(status!=CUSOLVER_STATUS_SUCCESS){
    return 1;
    cusolverDnDestroy(handle);
+  }
+  if(devInfo!=0){
+    return devInfo;
+    cusolverDnDestroy(handle);
   }
   cudaMemcpy(x_out, b, n*sizeof(double), cudaMemcpyDeviceToHost);
   cusolverDnDestroy(handle);
