@@ -49,3 +49,16 @@ bool Node::setConstraints(std::valarray<bool> & C)
     }
 	return !fail;
 }
+
+
+bool Node::addDisplacement(double x, double y, double z)
+{
+  if ( (x != 0 && this->_constrained[0]) || (y != 0 && this->_constrained[1]) || (z != 0 && this->_constrained[2]) )
+  {
+    std::cerr << "ERROR: You tried to move a node in a direction it can't move in!\n";
+  }
+  this->_coords[0] += x;
+  this->_coords[1] += y;
+  this->_coords[2] += z;
+  return true;
+}

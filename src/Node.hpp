@@ -34,6 +34,7 @@ public:
 // Utility:
     bool setConstraints(std::valarray<bool> &  C);
     bool setLoad(std::valarray<double> & P);
+    bool addDisplacement(double x, double y, double z);
 
 private:
     // Representation:

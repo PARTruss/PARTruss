@@ -1,5 +1,5 @@
 // Truss class implementation
-// Note: IDX2C(i,j,ld) (((j)*(ld))+(i)) defined as shortcut for indexing into matrix
+// Note: IDX2C(i,j,ld) (((j)*(ld))+(i)) defined in header as shortcut for indexing into matrix
 
 #include <cstddef>
 #include <valarray>
@@ -14,6 +14,8 @@
 #endif
 
 using json = nlohmann::json;
+
+extern int solveMatrix(double *A_in, int n, double *b_in, double *x_out);
 
 bool nodeEqual(Node n1, Node n2 )
 {
@@ -54,8 +56,7 @@ Truss::Truss(std::vector<Element> & Elements, std::vector<Node> & Nodes)
  // This is where the magic needs to happen...
  // Very much based off of the approach in 
  // https://www.mathworks.com/matlabcentral/fileexchange/31350-truss-solver-and-genetic-algorithm-optimzer?focused=5188720&tab=function#feedbacks
-std::vector<double *> Truss::solve(std::valarray<double> & Forces, 
-    std::valarray<double> & Displacements )   
+bool Truss::solve()   
 {
     int numNodes = this->_nodes.size();
     int numEdges = this->_elements.size();
@@ -66,7 +67,7 @@ std::vector<double *> Truss::solve(std::valarray<double> & Forces,
     if ( K == NULL || Re == NULL || Ld == NULL )
     {
         std::cerr << "ERROR: Malloc failed to allocate memory in the truss solver member function!\n";
-        exit(EXIT_FAILURE);
+        return false;
     }
     // Populate the load and restraint matrices from the nodes:
     for ( int i = 0 ; i < this->_nodes.size(); i ++ )
@@ -104,7 +105,7 @@ std::vector<double *> Truss::solve(std::valarray<double> & Forces,
     this->_stiffnessMatrixSize = numNodes * 3;
     // Now need to filter the stiffness matrix based on which nodes are/aren't restrained:
     // (it's a degrees of freedom indexing vector)
-    std::vector<int> dog;
+    std::vector<int> dof;
     for (int i = 0; i < numNodes*3; i++)
     {   
         // Iterate over Re as a flattened matrix (vector where each group of three rows
@@ -113,43 +114,70 @@ std::vector<double *> Truss::solve(std::valarray<double> & Forces,
                     // value. These indices will be filters on which the system stiffness matrix
                     // and load vector are sliced.
         {
-            dog.push_back(i);
+            dof.push_back(i);
         }
     }
-    // TODO: use thrust to efficiently filter the K matrix and Ld vector (view Ld as a flattened matrix)?
+    // TODO: use thrust or something to efficiently filter the K matrix and Ld vector (view Ld as a flattened matrix)?
     // Entire row-columns that correspond to the axis on which a node is constrained must be dropped.
     // Corresponding forces in restrained directions for each node in the external force matrix/vector
     //are also to be dropped.
     // Construct the simplified system stiffness matrix (missing entries corresponding to indices in 
     //degrees_of_freedom matrix)
-    double * A = (double*)calloc( sizeof(double), pow(dog.size(), 2) );
+    double * A = (double*)calloc( sizeof(double), pow(dof.size(), 2) );
     // Vector to hold the know external forces:
-    double * f = (double*)calloc( sizeof(double), dog.size() );
-    if ( A == NULL )
+    double * f = (double*)calloc( sizeof(double), dof.size() );
+    // Vector to hold the solved displacements of moveable nodes
+    double * d = (double*)calloc( sizeof(double), dof.size() );
+    if ( A == NULL || f == NULL || d == NULL )
     {
         std::cerr << "ERROR: Malloc failed to allocate memory in the truss solver member function!\n";
-        exit(EXIT_FAILURE);
+        return false;
     }
     // Copying over just the values that matter into A and f
-    for (int i = 0; i < dog.size(); i++) {
-        for (int k = 0; k < dog.size(); k++) {
-            A[IDX2C(i, k, dog.size())] = K[IDX2C(dog[i], dog[k], 3*numNodes)];
+    for (int i = 0; i < dof.size(); i++) {
+        for (int k = 0; k < dof.size(); k++) {
+            A[IDX2C(i, k, dof.size())] = K[IDX2C(dof[i], dof[k], 3*numNodes)];
         }
-        f[i] = Ld[dog[i]];  // This turns the 3 x numNodes matrix Ld into a filtered column vector
+        f[i] = Ld[dof[i]];  // This turns the 3 x numNodes matrix Ld into a filtered column vector
     }
     // At this point the system can now be solved for the displacement of each node!
     // Formula is d = A\f in MATLAB, or d = A^-1 f in more mathy terms.
-    // TODO: implement solving the matrix system using CUDA or something. Should that be done in here
-    // or should A and f be stored/returned and then the solving can be done outside, perhaps
-    // in a few different ways?
-
-    // Note that indices not stored in dog have a 0 displacement for that node and coordinate direction (xyz).
+    if ( solveMatrix( A, dof.size(), f, d ) != 0 )
+    {
+      std::cerr << "ERROR: Call to CuSolve in truss solve member function failed!\n";
+      return false;
+    }
+    // Now expand the total displacement matrix:
+    double * D = (double *)calloc( sizeof(double), numNodes * 3);
+    if ( D == NULL )
+    {
+      std::cerr << "ERROR: could not allocate memory for full displacement vector.\n";
+      return false;
+    }
+    for ( int i = 0; i < dof.size(); i++ )
+    {
+      // All other displacements are 0, implicitly by calloc
+      D[dof[i]] = d[i];
+    }
+    // Update all nodes with their respective displacements:
+    for ( int i = 0; i < numNodes; i++ )
+    {
+      int nodeId = this->_nodes[i].getId();
+      this->_nodes[i].addDisplacement(D[nodeId * 3], D[nodeId * 3 + 1], D[nodeId * 3 + 2]);
+    }
+    // Now solve for the force in each element and update it:
+    for ( int i = 0; i < numEdges; i++ )
+    {
+      int elemId = this->_elements[i].getId();
+      // TODO: Finish here...
+    }
+    // Note that indices not stored in dof have a 0 displacement for that node and coordinate direction (xyz).
     // Then the force in each element is k( (1/L)(dx, dy, dz)dot(displacement_node_2 - displacement_node1) )
     // Where displacement of each node is a 3-vector for the x,y,z components.
     // At this point the changes in each location should be written back, the forces in each element should be stored,
     // And json output should be written out.
-    std::vector<double *> systemEqns = { A, f };
-    return systemEqns;
+          
+    return true;
 }
 
 void Truss::outputJSON(std::ostream & f)
