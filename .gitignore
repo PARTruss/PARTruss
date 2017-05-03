@@ -4,8 +4,9 @@
 # Unignore all with extensions
 !*.*
 
-# Ignore .o files
+# Ignore .o and .gch files
 *.o
+*.gch
 
 # Unignore all dirs
 !*/
