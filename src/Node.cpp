@@ -27,7 +27,7 @@ bool Node::setLoad(std::valarray<double> & P)
     	else if (P[i] > 0)
     	{
     	    fail=true;
-	    	std::cerr << "Can't set a vertex load where there is a constraint.\n";
+            std::cerr << "Can't set a vertex load where there is a constraint.\n";
         }
     }
 	return !fail;
@@ -45,7 +45,7 @@ bool Node::setConstraints(std::valarray<bool> & C)
     	else if (C[i])
     	{
     	    fail=true;
-	    	std::cerr << "Can't set a vertex load where there is a constraint.\n";
+	    	std::cerr << "Can't set a vertex constraint where there is a load.\n";
         }
     }
 	return !fail;
