@@ -48,7 +48,9 @@ Element::Element(Node & start, Node & end, double area, double E)
         {
             double mult = ((i < 3 && j < 3) || (i>2 && j>2) ) ? (1.0) : (-1.0);
             this->_localStiffness[i*6+j] = mult * congruent_transformation[i%3][j%3];
+            std::cout << this->_localStiffness[i*6+j] << "\t";
         }
+        std::cout << "\n";
     }
     double _yieldStress;  // Stress at which material fails
 }

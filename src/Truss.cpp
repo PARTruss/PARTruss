@@ -42,6 +42,7 @@ Truss::Truss(std::vector<Element> & Elements, std::vector<Node> & Nodes)
         if (this->addNode(Nodes[i]))
         {
             this->_nodes[this->_nodes.size()-1].setId(i);
+            Nodes[i].setId(i);
         }
     }
     
@@ -76,7 +77,7 @@ bool Truss::solve()
     {
         int nodeId = this->_nodes[i].getId();   // Note that node numbering starts at 0, not 1
         std::cout << "Node id: " << nodeId << "\n";
-        std::cout << "Farthest index: "<<IDX2C(nodeId, 2, numNodes) << "\n";
+        std::cout << "Farthest index: "<<IDX2C(nodeId, 3, numNodes) << "\n";
         Re[IDX2C(nodeId, 0, numNodes)] = this->_nodes[i].getConstX();
         Re[IDX2C(nodeId, 1, numNodes)] = this->_nodes[i].getConstY();
         Re[IDX2C(nodeId, 2, numNodes)] = this->_nodes[i].getConstZ();
@@ -95,13 +96,16 @@ bool Truss::solve()
         int indices[6] = { 3*node1, 3*node1+1, 3*node1+2, 3*node2, 3*node2+1, 3*node2+2 };
         const double * local_stiffness = this->_elements[i].getLocalStiffness();
         // NOTE: Node numbering starts at 0; hence why the indexing above works.
+        std::cout << "Accessing local stiffness matrices to construct global matrix:\n";
         for (int j = 0; j < 6; j ++ )
         {
             for (int k = 0; k < 6; k++ )
             {
                 // Add the values from the element's stiffness matrix onto the global matrix
+                std::cout << local_stiffness[IDX2C(j, k, 6)] << "\t";
                 K[IDX2C(indices[j], indices[k], numNodes*3)] += local_stiffness[IDX2C(j, k, 6)];
             }
+            std::cout << "\n";
         }
     }
     // Now that the global stiffness matrix exists, save it!
@@ -121,6 +125,19 @@ bool Truss::solve()
             dof.push_back(i);
         }
     }
+   
+    std::cout << "Printing system matrix: (full)\n";
+    for (int i = 0; i < 3*numNodes; i++)
+    {
+      for (int j = 0; j < 3*numNodes; j++)
+      {
+        std::cout << K[IDX2C(i, j, numNodes*3)] << "\t";
+      }
+      std::cout << "\n";
+    }
+    std::cout << "Printed the system matrix.\n";
+
+
     // TODO: use thrust or something to efficiently filter the K matrix and Ld vector (view Ld as a flattened matrix)?
     // Entire row-columns that correspond to the axis on which a node is constrained must be dropped.
     // Corresponding forces in restrained directions for each node in the external force matrix/vector
@@ -144,6 +161,13 @@ bool Truss::solve()
         }
         f[i] = Ld[dof[i]];  // This turns the 3 x numNodes matrix Ld into a filtered column vector
     }
+    for (int i = 0; i < dof.size(); i++) {
+        for (int k = 0; k < dof.size(); k++) {
+            std::cout << A[IDX2C(i, k, dof.size())] << " \t";
+        }
+        std::cout << "\n";
+        //f[i] = Ld[dof[i]];  // This turns the 3 x numNodes matrix Ld into a filtered column vector
+    }
     // At this point the system can now be solved for the displacement of each node!
     // Formula is d = A\f in MATLAB, or d = A^-1 f in more mathy terms.
     if ( solveMatrix( A, dof.size(), f, d ) != 0 )
@@ -162,6 +186,7 @@ bool Truss::solve()
     {
       // All other displacements are 0, implicitly by calloc
       D[dof[i]] = d[i];
+      std::cout << "Writing " << d[i] << "\n";
     }
     // Update all nodes with their respective displacements:
     for ( int i = 0; i < numNodes; i++ )
