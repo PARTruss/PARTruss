@@ -19,7 +19,7 @@
 #include <cstdlib>
 #ifndef IDX2C
 // Macro to map from 
-#define IDX2C(i,j,ld) (((j)*(ld))+(i))
+#define IDX2C(i,j,ld) (((i)*(ld))+(j))
 #endif
 
 // NOTE: Only implementing stiffness method for 2D (for now?)!
