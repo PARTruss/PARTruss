@@ -1,6 +1,8 @@
 // Truss class implementation
 // Note: IDX2C(i,j,ld) (((j)*(ld))+(i)) defined in header as shortcut for indexing into matrix
 
+#include <iostream>
+#include <fstream>
 #include <cstddef>
 #include <valarray>
 #include <cmath>
@@ -182,7 +184,7 @@ bool Truss::solve()
     return true;
 }
 
-void Truss::outputJSON(std::ostream & f)
+void Truss::outputJSON()
 {
     // This needs to output JSON stuff...
     // Go through each node and output it in json formatted goodness
@@ -215,8 +217,8 @@ void Truss::outputJSON(std::ostream & f)
     }
     edges += "]";
     j["Edges"] = json::parse(edges);
-    
-    f << j;
+    std::ofstream o("trussOut.json");
+    o << std::setw(4) << j << std::endl;
 }
 
 

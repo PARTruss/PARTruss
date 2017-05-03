@@ -120,13 +120,7 @@ int main( int argc, char ** argv )
       std::cerr << "ERROR: Something went wrong in solving the truss :(\n";
     }
     // Write to json  
-#if DEBUG > 3
-    json tmp = t.outputJSON(std::cout);
-#endif
-    std::ofstream myfile;
-    myfile.open ("trussOut.json");
-    t.outputJSON(myfile);
-    myfile.close();
     // Make available to the webgl renderer??
-	return 0;
+    t.outputJSON();
+    return 0;
 }
