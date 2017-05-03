@@ -11,7 +11,7 @@ int solveMatrix(double *A_in, int n, double *b_in, double *x_out){
   cusolverDnHandle_t handle;
   cusolverStatus_t status;
   status = cusolverDnCreate(&handle);
-  if(status!=CUSOLVER_STATUS_SUCCESS) return 1;
+  if(status!=CUSOLVER_STATUS_SUCCESS) return 0;
   int Lwork;
 
   cudaMallocManaged(&A, (size_t) (n*n*sizeof(double)));
@@ -22,14 +22,24 @@ int solveMatrix(double *A_in, int n, double *b_in, double *x_out){
   cudaDeviceSynchronize();
   status = cusolverDnDgetrf_bufferSize(handle, n, n, A, n, &Lwork );
   cudaDeviceSynchronize();
-  if(status!=CUSOLVER_STATUS_SUCCESS) return 1;
+  if(status!=CUSOLVER_STATUS_SUCCESS){
+    return 1;
+    cusolverDnDestroy(handle);
+  }
   cudaMallocManaged(&Workspace, (size_t) Lwork*sizeof(double));
   status = cusolverDnDgetrf(handle, n, n, A, n, Workspace, devIpiv, &devInfo);
   cudaDeviceSynchronize();
-  if(status!=CUSOLVER_STATUS_SUCCESS) return 1;
+  if(status!=CUSOLVER_STATUS_SUCCESS){
+    return 1;
+    cusolverDnDestroy(handle);
+  }
   status = cusolverDnDgetrs(handle, CUBLAS_OP_T, n, 1, A, n, devIpiv, b, n, &devInfo );
   cudaDeviceSynchronize();
-  if(status!=CUSOLVER_STATUS_SUCCESS) return 1;
+  if(status!=CUSOLVER_STATUS_SUCCESS){
+   return 1;
+   cusolverDnDestroy(handle);
+  }
   cudaMemcpy(x_out, b, n*sizeof(double), cudaMemcpyDeviceToHost);
+  cusolverDnDestroy(handle);
   return 0;
 }
