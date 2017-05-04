@@ -107,11 +107,11 @@ bool Truss::solve()
             {
                 // Add the values from the element's stiffness matrix onto the global matrix
                 if(DEBUGLVL>2)
+                {
                     std::cout << local_stiffness[IDX2C(j, k, 6)] << "\t";
-                //#pragma omp atomic
-                //{
-                  K[IDX2C(indices[j], indices[k], numNodes*3)] += local_stiffness[IDX2C(j, k, 6)];
-                //}
+                }
+                #pragma omp atomic
+                K[IDX2C(indices[j], indices[k], numNodes*3)] += local_stiffness[IDX2C(j, k, 6)];
             }
             if(DEBUGLVL>2)
                 std::cout << "\n";
@@ -205,7 +205,7 @@ bool Truss::solve()
       this->_nodes[i].addDisplacement(D[nodeId * 3], D[nodeId * 3 + 1], D[nodeId * 3 + 2]);
     }
     // Now solve for the force in each element and update it:
-    //#pragma omp parallel for
+    #pragma omp parallel for
     for ( int i = 0; i < numEdges; i++ )
     {
       int elemId = this->_elements[i].getId();
