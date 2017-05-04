@@ -293,38 +293,3 @@ void Truss::outputJSON(std::ostream &output)
     output << std::setw(4) << j << std::endl;
 }
 
-
-bool Truss::addNode( Node & n )
-{
-    bool alreadyExists = false;
-    for ( int i = 0; i < this->_nodes.size(); i++ )
-    {
-        alreadyExists |= nodeEqual(n, this->_nodes[i] );
-    }
-    if ( alreadyExists ){
-        std::cerr << "Error: this node has already been added to the truss. Skipping!\n";
-        return false;
-    }
-    _nodes.push_back(n);
-    if(COMMENTARY>1)
-        std::cout << "Node addition successful.\n";
-    return true;
-}
-
-bool Truss::addElement( Element & e )
-{
-    bool alreadyExists = false;
-    for ( int i = 0; i < this->_elements.size(); i++ )
-    {
-        alreadyExists |= elemEqual(this->_elements[i], e);
-    }
-    if ( alreadyExists ){
-        std::cerr << "Error: this element has already been added to the truss. Skipping!\n";
-        return false;
-    }
-    if(COMMENTARY>1)
-        std::cout << "Element addition successful.\n";
-    _elements.push_back(e);
-    return true;   
-}
-
