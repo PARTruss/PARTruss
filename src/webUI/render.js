@@ -112,9 +112,10 @@ function addEventListeners(){
     document.addEventListener('wheel', function(event)
     {
         event.preventDefault();
-        if (event.deltaY > 0) camera.z += 0.1;
-        else camera.z -= 0.1;
-        if(camera.z<0.1) camera.z=0.1;  
+        var factor = 0.1*(camera.z+0.1)
+        if (event.deltaY > 0) camera.z += factor;
+        else camera.z -= factor;
+        if(camera.z<0.001) camera.z=0.001;  
         render();  
     })
 
