@@ -54,8 +54,8 @@ void usage( int argc, char ** argv )
 	if ( argc != 2 )
 	{
         std::cerr<<"Usage is:"<<std::endl;
-        std::cerr<<argv[0]<<" <inputFile> [-vvvvv] [-ccccc] -o <outFile>"<<endl;
-        std::cerr<<argv[0]<<" -o -   (to read from STDIN, write to STDOUT)"<<endl;
+        std::cerr<<argv[0]<<" <inputFile> [-vvvvv] [-ccccc] -o <outFile>"<<std::endl;
+        std::cerr<<argv[0]<<" -o -   (to read from STDIN, write to STDOUT)"<<std::endl;
 		exit(EXIT_FAILURE);
 	}
 }
@@ -94,7 +94,7 @@ void parseArgs(int argc, char* argv[], std::istream* &input, std::ostream* &outp
         input = &std::cin;
     else
         input = new std::ifstream(infile);
-    if(outFile == NULL) usage(argc, argv);
+    if(outfile == NULL) usage(argc, argv);
     if(strcmp(outfile,"-")==0)
         output = &std::cout;
     else
@@ -109,6 +109,8 @@ int main( int argc, char ** argv )
 	//usage(argc, argv);
 	// TODO: add err handling for file reading...
     json j;
+    if(COMMENTARY > 0){
+        std::cout << "Reading input file"<<std::endl;
     *input >> j;
     
 if(DEBUGLVL > 2){

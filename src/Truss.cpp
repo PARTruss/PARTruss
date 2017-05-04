@@ -112,7 +112,7 @@ bool Truss::solve()
         int indices[6] = { 3*node1, 3*node1+1, 3*node1+2, 3*node2, 3*node2+1, 3*node2+2 };
         const double * local_stiffness = this->_elements[i].getLocalStiffness();
         // NOTE: Node numbering starts at 0; hence why the indexing above works.
-        if(COMMENTARY>0)
+        if(COMMENTARY>1)
             std::cout << "Accessing local stiffness matrices to construct global matrix:\n";
         for (int j = 0; j < 6; j ++ )
         {
