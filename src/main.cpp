@@ -91,11 +91,11 @@ void parseArgs(int argc, char* argv[], std::istream* &input, std::ostream* &outp
     if(infile == NULL)
         input = &std::cin;
     else
-        input = &std::ifstream(infile);
+        input = new std::ifstream(infile);
     if(strcmp(outfile,"-")==0)
         output = &std::cout;
     else
-        output = &std::ofstream(outfile);
+        output = new std::ofstream(outfile);
 }
 
 int main( int argc, char ** argv )
