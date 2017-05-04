@@ -1,9 +1,10 @@
 CXX = nvcc
 CXXLINKER = nvcc
-CXXFLAGS = -g -arch=compute_35 -std=c++11 -lcublas -lcusolver
+CXXFLAGS = -g -arch=compute_35 -std=c++11 -Xcompiler -fopenmp
+LDFLAGS = -lcublas -lcusolver -arch=compute_35 -lgomp
 
 main: main.o Truss.o Node.o Element.o
-	$(CXXLINKER) $(CXXFLAGS) -o main Truss.o Node.o Element.o main.o solveMatrix.o
+	$(CXXLINKER) $(LDFLAGS) -o main Truss.o Node.o Element.o main.o solveMatrix.o
 
 Truss.o: Truss.cpp Truss.hpp cusolver/solveMatrix.cu
 	$(CXX) $(CXXFLAGS) -c Truss.cpp cusolver/solveMatrix.cu
