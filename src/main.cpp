@@ -157,7 +157,6 @@ if(DEBUGLVL > 2){
     	double E = j["Edges"][pos]["ElasticModulus"];
     	double section = j["Edges"][pos]["SectionArea"];
 	Element e = Element(vertices[e0], vertices[e1], section, E);
-	Element e = *(new Element(vertices[e0], vertices[e1], section, E));
         e.setId(pos);
         edges[pos] = e;
     }
