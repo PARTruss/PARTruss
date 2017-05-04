@@ -43,7 +43,7 @@
 #define DEBUG 3
 
 struct timespec times[12];
-string timeMeanings[] = {
+std::string timeMeanings[] = {
     "Read input data file",
     "Parse vertices from input",
     "Parse edges from input",
@@ -55,7 +55,7 @@ string timeMeanings[] = {
     "Calculating forces/stresses",
     "Solving system complete",
     "Writing to output file"
-}
+};
 
 
 int DEBUGLVL=0;
@@ -213,13 +213,13 @@ if(DEBUGLVL > 2){
         elapsed[i] = (times[i+1].tv_sec - times[0].tv_sec);
         elapsed[i] += (times[i+1].tv_nsec - times[0].tv_nsec) / 1000000000.0;
     }
-
+    std::cout<<std::scientific<<std::setprecision(5);
     for(int i=0;i<11;i++){
         if(i==0)
             std::cout<<elapsed[i]<<" ("<<elapsed[i]<<")";
         else
             std::cout<<elapsed[i]<<" ("<<elapsed[i]-elapsed[i-1]<<")";
-        cout<<"\t"<<timeMeanings[i]<<endl;
+        std::cout<<"\t"<<timeMeanings[i]<<std::endl;
     }
 
     return 0;
