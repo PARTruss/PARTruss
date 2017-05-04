@@ -1,0 +1,185 @@
+{
+    "Edges": [
+        {
+            "ElasticModulus": 2500, 
+            "Endpoints": [
+                0, 
+                1
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 2500, 
+            "Endpoints": [
+                1, 
+                2
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 2500, 
+            "Endpoints": [
+                2, 
+                3
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 2500, 
+            "Endpoints": [
+                3, 
+                4
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 2500, 
+            "Endpoints": [
+                4, 
+                5
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 2500, 
+            "Endpoints": [
+                5, 
+                6
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }
+    ], 
+    "Vertices": [
+        {
+            "Anchored": [
+                0.0, 
+                0.0, 
+                0.0
+            ], 
+            "XYZAppliedForces": [
+                0.0, 
+                0.0, 
+                0.0
+            ], 
+            "XYZPosition": [
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        {
+            "Anchored": [
+                0.0, 
+                0.0, 
+                0.0
+            ], 
+            "XYZAppliedForces": [
+                0.0, 
+                0.0, 
+                0.0
+            ], 
+            "XYZPosition": [
+                3.0, 
+                2.0, 
+                0.0
+            ]
+        }, 
+        {
+            "Anchored": [
+                0.0, 
+                0.0, 
+                0.0
+            ], 
+            "XYZAppliedForces": [
+                0.0, 
+                0.0, 
+                0.0
+            ], 
+            "XYZPosition": [
+                6.0, 
+                4.0, 
+                0.0
+            ]
+        }, 
+        {
+            "Anchored": [
+                0.0, 
+                0.0, 
+                0.0
+            ], 
+            "XYZAppliedForces": [
+                0.0, 
+                0.0, 
+                0.0
+            ], 
+            "XYZPosition": [
+                9.0, 
+                2.0, 
+                0.0
+            ]
+        }, 
+        {
+            "Anchored": [
+                0.0, 
+                0.0, 
+                0.0
+            ], 
+            "XYZAppliedForces": [
+                0.0, 
+                0.0, 
+                0.0
+            ], 
+            "XYZPosition": [
+                12.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        {
+            "Anchored": [
+                0.0, 
+                0.0, 
+                0.0
+            ], 
+            "XYZAppliedForces": [
+                0.0, 
+                0.0, 
+                0.0
+            ], 
+            "XYZPosition": [
+                8.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        {
+            "Anchored": [
+                0.0, 
+                0.0, 
+                0.0
+            ], 
+            "XYZAppliedForces": [
+                0.0, 
+                0.0, 
+                0.0
+            ], 
+            "XYZPosition": [
+                4.0, 
+                0.0, 
+                0.0
+            ]
+        }
+    ]
+}

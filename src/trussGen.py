@@ -2,6 +2,13 @@
 
 import sys
 import json
+import random
+
+random.seed()
+# Maximum force allowabe:
+MAX_FORCE_X = 500
+MAX_FORCE_Y = 500
+MAX_FORCE_Z = 500
 
 if len(sys.argv) < 3:
 	print("USAGE: {} truss_repetitions output_filename.json".format(sys.argv[0]))
@@ -25,10 +32,18 @@ connections = [ [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 0], [1, 6], 
 json_to_dump = { 'Vertices':[], 'Edges':[] }
 
 for i in range(0,num_repetitions):
-	for loc in locations:
+	for idx, loc in enumerate(locations):
 		loc2 = loc[:]
 		loc2[2] = i - (num_repetitions/2.0)
-		vertex = { 'XYZPosition':loc2, 'XYZAppliedForces':[0.0,0.0,0.0], 'Anchored':[0.0,0.0,0.0] }
+                if idx == 0 or idx == 4:
+                    anchored = [True, True, True]
+                else:
+                    anchored = [False, False, False]
+                if idx == 1 or idx == 2 or idx ==3:
+                    AppForce = [ MAX_FORCE_X * random.uniform(-1, 1), MAX_FORCE_Y * random.uniform(-1, 1), MAX_FORCE_Z * random.uniform(-1, 1) ]
+                else:
+                    AppForce = [ 0.0, 0.0, 0.0 ]
+		vertex = { 'XYZPosition':loc2, 'XYZAppliedForces':AppForce, 'Anchored':anchored }
 		json_to_dump['Vertices'].append(vertex)
 
 	for conn in connections:
