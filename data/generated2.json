@@ -289,14 +289,124 @@
             "Force": 0.0, 
             "SectionArea": 0.25, 
             "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 25000000000, 
+            "Endpoints": [
+                0, 
+                8
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 25000000000, 
+            "Endpoints": [
+                1, 
+                9
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 25000000000, 
+            "Endpoints": [
+                2, 
+                10
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 25000000000, 
+            "Endpoints": [
+                3, 
+                11
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 25000000000, 
+            "Endpoints": [
+                4, 
+                12
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 25000000000, 
+            "Endpoints": [
+                5, 
+                13
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 25000000000, 
+            "Endpoints": [
+                6, 
+                7
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 25000000000, 
+            "Endpoints": [
+                1, 
+                13
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 25000000000, 
+            "Endpoints": [
+                2, 
+                13
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 25000000000, 
+            "Endpoints": [
+                2, 
+                12
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
+        }, 
+        {
+            "ElasticModulus": 25000000000, 
+            "Endpoints": [
+                3, 
+                12
+            ], 
+            "Force": 0.0, 
+            "SectionArea": 0.25, 
+            "Stress": 0.0
         }
     ], 
     "Vertices": [
         {
             "Anchored": [
-                0.0, 
-                0.0, 
-                0.0
+                true, 
+                true, 
+                true
             ], 
             "XYZAppliedForces": [
                 0.0, 
@@ -311,14 +421,14 @@
         }, 
         {
             "Anchored": [
-                0.0, 
-                0.0, 
-                0.0
+                false, 
+                false, 
+                false
             ], 
             "XYZAppliedForces": [
-                0.0, 
-                0.0, 
-                0.0
+                -2296399.1377426917, 
+                4670012.167717602, 
+                -3733682.486085784
             ], 
             "XYZPosition": [
                 -3.0, 
@@ -328,14 +438,14 @@
         }, 
         {
             "Anchored": [
-                0.0, 
-                0.0, 
-                0.0
+                false, 
+                false, 
+                false
             ], 
             "XYZAppliedForces": [
-                0.0, 
-                0.0, 
-                0.0
+                1292714.095695322, 
+                2374130.4802778075, 
+                731418.8577347114
             ], 
             "XYZPosition": [
                 0.0, 
@@ -345,14 +455,14 @@
         }, 
         {
             "Anchored": [
-                0.0, 
-                0.0, 
-                0.0
+                false, 
+                false, 
+                false
             ], 
             "XYZAppliedForces": [
-                0.0, 
-                0.0, 
-                0.0
+                -3472795.1897278875, 
+                490183.095713328, 
+                4281049.649486376
             ], 
             "XYZPosition": [
                 3.0, 
@@ -362,9 +472,9 @@
         }, 
         {
             "Anchored": [
-                0.0, 
-                0.0, 
-                0.0
+                true, 
+                true, 
+                true
             ], 
             "XYZAppliedForces": [
                 0.0, 
@@ -379,9 +489,9 @@
         }, 
         {
             "Anchored": [
-                0.0, 
-                0.0, 
-                0.0
+                false, 
+                false, 
+                false
             ], 
             "XYZAppliedForces": [
                 0.0, 
@@ -396,9 +506,9 @@
         }, 
         {
             "Anchored": [
-                0.0, 
-                0.0, 
-                0.0
+                false, 
+                false, 
+                false
             ], 
             "XYZAppliedForces": [
                 0.0, 
@@ -413,9 +523,9 @@
         }, 
         {
             "Anchored": [
-                0.0, 
-                0.0, 
-                0.0
+                true, 
+                true, 
+                true
             ], 
             "XYZAppliedForces": [
                 0.0, 
@@ -430,14 +540,14 @@
         }, 
         {
             "Anchored": [
-                0.0, 
-                0.0, 
-                0.0
+                false, 
+                false, 
+                false
             ], 
             "XYZAppliedForces": [
-                0.0, 
-                0.0, 
-                0.0
+                -4316445.801569466, 
+                4012149.2037956943, 
+                26636.014576086887
             ], 
             "XYZPosition": [
                 -3.0, 
@@ -447,14 +557,14 @@
         }, 
         {
             "Anchored": [
-                0.0, 
-                0.0, 
-                0.0
+                false, 
+                false, 
+                false
             ], 
             "XYZAppliedForces": [
-                0.0, 
-                0.0, 
-                0.0
+                -2076615.158202363, 
+                -729496.8843697868, 
+                1889788.5404829595
             ], 
             "XYZPosition": [
                 0.0, 
@@ -464,14 +574,14 @@
         }, 
         {
             "Anchored": [
-                0.0, 
-                0.0, 
-                0.0
+                false, 
+                false, 
+                false
             ], 
             "XYZAppliedForces": [
-                0.0, 
-                0.0, 
-                0.0
+                2363204.684577013, 
+                4735412.237461339, 
+                711850.5458657797
             ], 
             "XYZPosition": [
                 3.0, 
@@ -481,9 +591,9 @@
         }, 
         {
             "Anchored": [
-                0.0, 
-                0.0, 
-                0.0
+                true, 
+                true, 
+                true
             ], 
             "XYZAppliedForces": [
                 0.0, 
@@ -498,9 +608,9 @@
         }, 
         {
             "Anchored": [
-                0.0, 
-                0.0, 
-                0.0
+                false, 
+                false, 
+                false
             ], 
             "XYZAppliedForces": [
                 0.0, 
@@ -515,9 +625,9 @@
         }, 
         {
             "Anchored": [
-                0.0, 
-                0.0, 
-                0.0
+                false, 
+                false, 
+                false
             ], 
             "XYZAppliedForces": [
                 0.0, 

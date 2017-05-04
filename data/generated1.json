@@ -121,7 +121,7 @@
             "XYZAppliedForces": [
                 0.0, 
                 0.0, 
-                0.0
+                0
             ], 
             "XYZPosition": [
                 -6.0, 
@@ -133,12 +133,12 @@
             "Anchored": [
                 false, 
                 false, 
-                false
+                true
             ], 
             "XYZAppliedForces": [
-                266.03776450051816, 
-                219.55781345934076, 
-                -425.6352715211754
+                -3731378.1285900404, 
+                -1474493.6097811544, 
+                0
             ], 
             "XYZPosition": [
                 -3.0, 
@@ -150,12 +150,12 @@
             "Anchored": [
                 false, 
                 false, 
-                false
+                true
             ], 
             "XYZAppliedForces": [
-                -402.33812272496397, 
-                -32.71479948442357, 
-                -8.545626743009848
+                -3713184.9033636465, 
+                4722797.464543096, 
+                0
             ], 
             "XYZPosition": [
                 0.0, 
@@ -167,12 +167,12 @@
             "Anchored": [
                 false, 
                 false, 
-                false
+                true
             ], 
             "XYZAppliedForces": [
-                32.58930019159789, 
-                51.68841559525272, 
-                -497.2053185732558
+                -3838106.2633032957, 
+                -1308439.754488332, 
+                0
             ], 
             "XYZPosition": [
                 3.0, 
@@ -189,7 +189,7 @@
             "XYZAppliedForces": [
                 0.0, 
                 0.0, 
-                0.0
+                0
             ], 
             "XYZPosition": [
                 6.0, 
@@ -201,12 +201,12 @@
             "Anchored": [
                 false, 
                 false, 
-                false
+                true
             ], 
             "XYZAppliedForces": [
                 0.0, 
                 0.0, 
-                0.0
+                0
             ], 
             "XYZPosition": [
                 2.0, 
@@ -218,12 +218,12 @@
             "Anchored": [
                 false, 
                 false, 
-                false
+                true
             ], 
             "XYZAppliedForces": [
                 0.0, 
                 0.0, 
-                0.0
+                0
             ], 
             "XYZPosition": [
                 -2.0, 
