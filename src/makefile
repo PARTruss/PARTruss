@@ -1,6 +1,6 @@
 CXX = nvcc
 CXXLINKER = nvcc
-CXXFLAGS = -arch=compute_35 -std=c++11 -lcublas -lcusolver -g
+CXXFLAGS = -g -arch=compute_35 -std=c++11 -lcublas -lcusolver
 
 main: main.o Truss.o Node.o Element.o
 	$(CXXLINKER) $(CXXFLAGS) -o main Truss.o Node.o Element.o main.o solveMatrix.o

@@ -14,6 +14,7 @@
 #include "json.hpp"
 #define JSON
 #endif
+#include "util.hpp"
 
 using json = nlohmann::json;
 
@@ -135,16 +136,7 @@ bool Truss::solve()
     }
    
     std::cout << "Printing system matrix: (full)\n";
-    for (int i = 0; i < 3*numNodes; i++)
-    {
-      for (int j = 0; j < 3*numNodes; j++)
-      {
-        std::cout << K[IDX2C(i, j, numNodes*3)] << "\t";
-      }
-      std::cout << "\n";
-    }
-    std::cout << "Printed the system matrix.\n";
-
+    printMtx(K, 3*numNodes, 8);
 
     // TODO: use thrust or something to efficiently filter the K matrix and Ld vector (view Ld as a flattened matrix)?
     // Entire row-columns that correspond to the axis on which a node is constrained must be dropped.
@@ -169,15 +161,11 @@ bool Truss::solve()
         }
         f[i] = Ld[dof[i]];  // This turns the 3 x numNodes matrix Ld into a filtered column vector
     }
-    for (int i = 0; i < dof.size(); i++) {
-        for (int k = 0; k < dof.size(); k++) {
-            std::cout << A[IDX2C(i, k, dof.size())] << " \t";
-        }
-        std::cout << "\n";
-        //f[i] = Ld[dof[i]];  // This turns the 3 x numNodes matrix Ld into a filtered column vector
-    }
-    for (int i = 0; i < dof.size(); i++) {
-        std::cout << f[i];
+    std::cout << "Printing reduced matrix:\n";
+    printMtx(A, dof.size(), 8);
+    std::cout << "Printing forces:\n";    
+    for (int i = 0; i < dof.size(); i+=3) {
+        std::cout << f[i]<<" "<< f[i+1]<<" "<< f[i+2]<<" "<<std::endl;
     }
     // At this point the system can now be solved for the displacement of each node!
     // Formula is d = A\f in MATLAB, or d = A^-1 f in more mathy terms.
@@ -220,7 +208,7 @@ bool Truss::solve()
         };
       std::valarray<double> XYZRatio = this->_elements[i].getXYZRatios();
       this->_elements[i].setForce( disp_delt[0]*XYZRatio[0] + disp_delt[1]*XYZRatio[1] + disp_delt[2]*XYZRatio[2] );
-      std::cout << disp_delt[0]*XYZRatio[0] + disp_delt[1]*XYZRatio[1] + disp_delt[2]*XYZRatio[2] << std::endl;
+      //std::cout << disp_delt[0]*XYZRatio[0] + disp_delt[1]*XYZRatio[1] + disp_delt[2]*XYZRatio[2] << std::endl;
       
     }
     // Note that indices not stored in dof have a 0 displacement for that node and coordinate direction (xyz).
@@ -263,7 +251,7 @@ void Truss::outputJSON()
         if ( i < numEdges - 1) { edges += ", "; }
     }
     edges += "]";
-   std::cout << edges;
+    //std::cout << edges;
     j["Edges"] = json::parse(edges);
     std::ofstream o("trussOut.json");
     o << std::setw(4) << j << std::endl;
