@@ -14,7 +14,6 @@ ElasticModulus = 25000000000
 
 # Base 2d template truss structure, which can be repeated and connected adjacently
 locations = [ [0.0, 0.0, 0.0], [3.0, 2.0, 0.0], [6.0, 4.0, 0.0], [9.0, 2.0, 0.0], [12.0, 0.0, 0.0], [8.0, 0.0, 0.0], [4.0, 0.0, 0.0] ]
-<<<<<<< HEAD
 delta = [sum([ x[0] for x in locations])/len(locations), \
 	 sum([ x[1] for x in locations])/len(locations), \
 	 sum([ x[0] for x in locations])/len(locations) ]
@@ -27,7 +26,7 @@ json_to_dump = { 'Vertices':[], 'Edges':[] }
 for i in range(0,num_repetitions):
 	for loc in locations:
 		loc2 = loc[:]
-		loc2[2] += i
+		loc2[2] += i - (num_repetitions/2)
 		vertex = { 'XYZPosition':loc2, 'XYZAppliedForces':[0.0,0.0,0.0], 'Anchored':[0.0,0.0,0.0] }
 		json_to_dump['Vertices'].append(vertex)
 
