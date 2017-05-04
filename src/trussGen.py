@@ -20,6 +20,7 @@ delta = [sum([ x[0] for x in locations])/len(locations), \
 locations = [[i[0]-delta[0],i[1]-delta[1],i[2]-delta[2]] for i in locations]
 print locations
 connections = [ [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 0], [1, 6], [2, 6], [2, 5], [3, 5] ]
+
 #inter_layer_connections [ [], [], [], [] ]
 json_to_dump = { 'Vertices':[], 'Edges':[] }
 
@@ -39,8 +40,15 @@ for i in range(0,num_repetitions):
         if i > 0:
             for idx in range(len(locations)):
                 conn2 = [idx + (i-1)*len(locations), idx + i*len(locations)]
-		edge = { 'Endpoints':conn2, 'ElasticModulus':ElasticModulus, 'SectionArea':SectionArea, 'Force':0.0, 'Stress':0.0 }
-		json_to_dump['Edges'].append(edge)
+                edge2 = { 'Endpoints':conn2, 'ElasticModulus':ElasticModulus, 'SectionArea':SectionArea, 'Force':0.0, 'Stress':0.0 }
+                json_to_dump['Edges'].append(edge2)
+            for connTemp in connections:
+                conn3 = connTemp[:]
+                conn3[0] +=(i-1)*7
+                conn3[1] += i*7
+                edge3 = { 'Endpoints':conn3, 'ElasticModulus':ElasticModulus, 'SectionArea':SectionArea, 'Force':0.0, 'Stress':0.0 }
+                json_to_dump['Edges'].append(edge3)
+
                 
 
 json_str = json.dumps(json_to_dump, indent=4, sort_keys=True)
