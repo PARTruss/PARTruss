@@ -146,7 +146,8 @@ bool Truss::solve()
     }
     if(COMMENTARY>0)
         std::cout << "Printing system matrix: (full)\n";
-    printMtx(K, 3*numNodes, 8);
+   if(DEBUGLVL>1)
+        printMtx(K, 3*numNodes, 8);
 
     // TODO: use thrust or something to efficiently filter the K matrix and Ld vector (view Ld as a flattened matrix)?
     // Entire row-columns that correspond to the axis on which a node is constrained must be dropped.
@@ -177,9 +178,10 @@ bool Truss::solve()
         printMtx(A, dof.size(), 8);
     if(COMMENTARY>1)
         std::cout << "Printing forces:\n";
-    for (int i = 0; i < dof.size(); i++) {
-        std::cout << f[i]<<std::endl;
-    }
+    if(DEBUGLV>1)
+        for (int i = 0; i < dof.size(); i++) {
+            std::cout << f[i]<<std::endl;
+        }
     // At this point the system can now be solved for the displacement of each node!
     // Formula is d = A\f in MATLAB, or d = A^-1 f in more mathy terms.
     if(COMMENTARY>0)
