@@ -59,3 +59,11 @@ Element::Element(Node & start, Node & end, double area, double E)
         printMtx(_localStiffness, 6, 8);
     double _yieldStress;  // Stress at which material fails
 }
+
+Element::Element()
+{
+    _startNode = NULL;
+    _endNode = NULL;
+    _sectionArea = 0;
+    _youngModulus = 0;
+}

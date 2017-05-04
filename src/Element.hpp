@@ -17,6 +17,7 @@ class Element
   public:
     // Constructor:
     Element(Node &, Node &, double, double);
+    Element();
     
     // Setter:
     void setId(int id) { this->_id = id; }

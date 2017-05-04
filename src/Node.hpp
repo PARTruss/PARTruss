@@ -11,7 +11,7 @@ class Node
 {
 public:
     Node(double x, double y, double z);
-    Node()
+    Node();
 
 //Getters:
     std::valarray<double> getCoords() const { return this->_coords; }
