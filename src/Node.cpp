@@ -20,7 +20,7 @@ bool Node::setLoad(std::valarray<double> & P)
     bool fail = false;
     for (int i = 0; i < 3; i ++)
     {
-    	if (!this->_constrained[i] && P[i] > 0)
+    	if (!this->_constrained[i] )
     	{
     		this->_loads[i] = P[i];
     	}
