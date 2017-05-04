@@ -42,19 +42,6 @@
 
 #define DEBUG 3
 
-struct timespec t_start,
-                t_postRead,
-                t_postVerticesImport,
-                t_postEdgesImport,
-                t_postSolve,
-
-                postRestraintMatrix,
-                postReducedStiffness
-                postGlobalStiffness,
-                postGPU,
-                postDisplacements,
-                postForceCalc,
-                t_postWrite;
 struct timespec times[12];
 
 

@@ -18,19 +18,15 @@
 #endif
 #include "util.hpp"
 #include "cusolver/solveMatrix.h"
+#include <ctime>
+#include <cstdlib>
 
 extern int DEBUGLVL;
 extern int COMMENTARY;
 
 using json = nlohmann::json;
 
-extern struct timespec  postRestraintMatrix,
-                        postReducedStiffness
-                        postGlobalStiffness,
-                        postGPU,
-                        postDisplacements,
-                        postForceCalc,
-                        t_postWrite;
+extern struct timespec times[12];
 
 
 //bool nodeEqual(Node n1, Node n2 )
@@ -133,7 +129,7 @@ bool Truss::solve()
     }
 
     clock_gettime(CLOCK_MONOTONIC, &times[5]);
-    
+
     // Now need to filter the stiffness matrix based on which nodes are/aren't restrained:
     // (it's a degrees of freedom indexing vector)
     std::vector<int> dof;
