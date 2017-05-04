@@ -14,9 +14,8 @@
             "ElasticModulus": 25000.0,
             "Endpoints": [
                 1,
-            "Force": 0.0,
-            "SectionArea": 0.25,
-            "Stress": 0.0
+                2
+            ],
             "Force": -0.01,
             "SectionArea": 0.25,
             "Stress": -0.04
