@@ -16,7 +16,7 @@
 #endif
 #include "util.hpp"
 
-extern int DEBUGGLVL;
+extern int DEBUGLVL;
 extern int COMMENTARY;
 
 using json = nlohmann::json;

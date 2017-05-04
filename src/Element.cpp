@@ -6,7 +6,7 @@
 #define ELEM
 #endif
 
-extern int DEBUGGLVL;
+extern int DEBUGLVL;
 extern int COMMENTARY;
 
 #include "util.hpp"

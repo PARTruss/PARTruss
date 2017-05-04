@@ -39,7 +39,7 @@
 
 #define DEBUG 3
 
-int DEBUGGLVL=0;
+int DEBUGLVL=0;
 int COMMENTARY=0;
 
 // Set dimensionality of the simulation:
@@ -56,7 +56,7 @@ void usage( int argc, char ** argv )
 	}
 }
 
-void parsArgs(int argc, char* argv[], istream &input, ostream &output){
+void parseArgs(int argc, char* argv[], istream* &input, ostream* &output){
     input = NULL;
     output = NULL;
     DEBUGLVL = 0;
@@ -94,13 +94,13 @@ void parsArgs(int argc, char* argv[], istream &input, ostream &output){
 
 int main( int argc, char ** argv )
 {
-    std::istream& input;
-    std::ostream& output;
+    std::istream *input;
+    std::ostream *output;
     parseArgs(argc, argv, input, output);
 	//usage(argc, argv);
 	// TODO: add err handling for file reading...
     json j;
-    input >> j;
+    *input >> j;
     
 if(DEBUGLVL > 2){
     std::cout << "Vertices\n";
@@ -163,7 +163,7 @@ if(DEBUGLVL > 2){
     }
     // Write to json  
     // Make available to the webgl renderer??
-    t.outputJSON(output);
-    output.close();
+    t.outputJSON(*output);
+    output->close();
     return 0;
 }
