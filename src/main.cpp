@@ -56,13 +56,51 @@ void usage( int argc, char ** argv )
 	}
 }
 
+void parsArgs(int argc, char* argv[], istream &input, ostream &output){
+    input = NULL;
+    output = NULL;
+    DEBUGLVL = 0;
+    COMMENTARY = 0;
+    char* outfile = NULL;
+    char* infile = NULL;
+    for(int i=1;i<argc;i++){
+        if(argv[i][0]='-'){
+            int c = 1;
+            while(argv[i][c]!='\0'){
+                if(argv[i][c]=='v' || argv[i][c]=='V')
+                    DEBUGLVL++;
+                if(argv[i][c]=='c' || argv[i][c]=='C')
+                    COMMENTARY++;
+                if(argv[i][c]=='o'){
+                    if(argc<i+2){
+                        usage(argc, argv);
+                    }
+                    outfile = argv[i+1];
+                    i++;
+                    continue;
+                }
+                c++;  
+            }
+        }
+        else{
+            infile = argv[i];
+        }
+    }
+    if(infile == NULL)
+        input = std::cin;
+    if(strcmp(outfile,"-")==0)
+        output = std::cout;
+}
+
 int main( int argc, char ** argv )
 {
-	usage(argc, argv);
+    std::istream& input;
+    std::ostream& output;
+    parseArgs(argc, argv, input, output);
+	//usage(argc, argv);
 	// TODO: add err handling for file reading...
-	std::ifstream i(argv[1]);
     json j;
-    i >> j;
+    input >> j;
     
 if(DEBUGLVL > 2){
     std::cout << "Vertices\n";
@@ -125,6 +163,7 @@ if(DEBUGLVL > 2){
     }
     // Write to json  
     // Make available to the webgl renderer??
-    t.outputJSON();
+    t.outputJSON(output);
+    output.close();
     return 0;
 }

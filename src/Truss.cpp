@@ -235,12 +235,11 @@ bool Truss::solve()
     return true;
 }
 
-void Truss::outputJSON(char* filename)
+void Truss::outputJSON(std::ostream &output)
 {
     // This needs to output JSON stuff...
     // Go through each node and output it in json formatted goodness
     // Go through each vertex and output it in json format
-    std::ofstream out(filename);
     int numNodes = this->_nodes.size();
     int numEdges = this->_elements.size();
     json j;
@@ -269,8 +268,7 @@ void Truss::outputJSON(char* filename)
     edges += "]";
     //std::cout << edges;
     j["Edges"] = json::parse(edges);
-    out << std::setw(4) << j << std::endl;
-    out.close();
+    output << std::setw(4) << j << std::endl;
 }
 
 
