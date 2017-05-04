@@ -141,6 +141,7 @@ if(DEBUGLVL > 2){
         double Fy = j["Vertices"][pos]["XYZAppliedForces"][1];
         double Fz = j["Vertices"][pos]["XYZAppliedForces"][2];
         Node &n = vertices[pos];
+        n.setPosition(x, y, z);
         std::valarray<bool> constraints {moveX, moveY, moveZ};
         std::valarray<double> loads {Fx, Fy, Fz };
         n.setConstraints(constraints);
