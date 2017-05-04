@@ -11,6 +11,7 @@ class Node
 {
 public:
     Node(double x, double y, double z);
+    Node()
 
 //Getters:
     std::valarray<double> getCoords() const { return this->_coords; }
@@ -35,6 +36,7 @@ public:
     bool setConstraints(std::valarray<bool> &  C);
     bool setLoad(std::valarray<double> & P);
     bool addDisplacement(double x, double y, double z);
+    void setPosition(double x, double y, double z);
 
 private:
     // Representation:

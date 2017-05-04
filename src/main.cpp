@@ -125,16 +125,14 @@ if(DEBUGLVL > 2){
     std::cout << "\n\n";
 }
 
-    std::vector<Node> vertices;
-    vertices.reserve(j["Vertices"].size());
-    std::vector<Element> edges;
-    edges.reserve(j["Edges"].size());
+    std::vector<Node> vertices(j["Vertices"].size());
+    std::vector<Element> edges(j["Edges"].size());
 
     // Loop through all vertices and add them to the vector
     for (int pos = 0; pos < j["Vertices"].size(); pos++)
     {
         double x = j["Vertices"][pos]["XYZPosition"][0];
-	double y = j["Vertices"][pos]["XYZPosition"][1];
+	    double y = j["Vertices"][pos]["XYZPosition"][1];
         double z = j["Vertices"][pos]["XYZPosition"][2];
         bool moveX = j["Vertices"][pos]["Anchored"][0];
         bool moveY = j["Vertices"][pos]["Anchored"][1];
@@ -142,23 +140,23 @@ if(DEBUGLVL > 2){
         double Fx = j["Vertices"][pos]["XYZAppliedForces"][0];
         double Fy = j["Vertices"][pos]["XYZAppliedForces"][1];
         double Fz = j["Vertices"][pos]["XYZAppliedForces"][2];
-        Node n = *(new Node(x, y, z));
+        Node &n = vertices[pos];
         std::valarray<bool> constraints {moveX, moveY, moveZ};
         std::valarray<double> loads {Fx, Fy, Fz };
         n.setConstraints(constraints);
         n.setLoad(loads);
         n.setId(pos);
-        vertices[pos] = n;
+        //vertices[pos] = n;
     }
 
     // Now iterate over the edges and create the connections between trussNodes
     for (int pos = 0; pos < j["Edges"].size(); pos++)
     {
- 	int e0 = j["Edges"][pos]["Endpoints"][0];
- 	int e1 = j["Edges"][pos]["Endpoints"][1];
+     	int e0 = j["Edges"][pos]["Endpoints"][0];
+     	int e1 = j["Edges"][pos]["Endpoints"][1];
     	double E = j["Edges"][pos]["ElasticModulus"];
     	double section = j["Edges"][pos]["SectionArea"];
-	Element e = *(new Element(vertices[e0], vertices[e1], section, E));
+	    Element e = *(new Element(vertices[e0], vertices[e1], section, E));
         e.setId(pos);
         edges[pos] = e;
     }
