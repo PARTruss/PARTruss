@@ -94,13 +94,13 @@
     "Vertices": [
         {
             "Anchored": [
-                true, 
-                true, 
-                true
+                false, 
+                false, 
+               true
             ], 
             "XYZAppliedForces": [
-                0.0, 
-                0.0, 
+                80000000.0, 
+                -92323000.0, 
                 0.0
             ], 
             "XYZPosition": [
@@ -160,9 +160,9 @@
         }, 
         {
             "Anchored": [
-                false, 
-                false, 
-               false
+                true, 
+                true, 
+               true
             ], 
             "XYZAppliedForces": [
                 0.0, 
@@ -179,11 +179,11 @@
             "Anchored": [
                 false, 
                 false, 
-                false
+               true 
             ], 
             "XYZAppliedForces": [
                 0.0, 
-                -100.0, 
+                -1000000000.0, 
                 0.0
             ], 
             "XYZPosition": [
@@ -196,11 +196,11 @@
             "Anchored": [
                 false, 
                 false, 
-                false
+               true 
             ], 
             "XYZAppliedForces": [
                 0.0, 
-                0.0, 
+                900000000.0, 
                 0.0
             ], 
             "XYZPosition": [
