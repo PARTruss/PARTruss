@@ -178,7 +178,7 @@ if(DEBUGLVL > 2){
     Truss t = Truss(edges,vertices);
     
     // Solve
-    int retval = t.solve()
+    int retval = t.solve();
     clock_gettime(CLOCK_MONOTONIC, &times[10]);
 
     if ( retval != 0 )
