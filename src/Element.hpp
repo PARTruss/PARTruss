@@ -22,14 +22,7 @@ class Element
     // Setter:
     void setId(int id) { this->_id = id; }
     void setForce(double f) { this->_force = f; }
-    void setElem(Node & start, Node & end, double section, double E)
-    {
-        this->_startNode = &start;
-        this->_endNode = &end;
-        this->_sectionArea = section;
-        this->_youngModulus = E;
-	calcElem();
-    }
+    void setElem(Node & start, Node & end, double section, double E);
     void calcElem();
     
     // Getters:

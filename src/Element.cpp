@@ -20,11 +20,30 @@ Element::Element(Node & start, Node & end, double area, double E)
     calcElem();
 }
 
+
+Element::Element()
+{
+    _startNode = NULL;
+    _endNode = NULL;
+    _sectionArea = 0;
+    _youngModulus = 0;
+}
+
+
+void setElem(Node & start, Node & end, double section, double E)
+{
+    this->_startNode = &start;
+    this->_endNode = &end;
+    this->_sectionArea = section;
+    this->_youngModulus = E;
+    calcElem();
+}
+
 void Element::calcElem()
 {
     // Additional processing and setting of members not directly from args:
     std::valarray<double> coord1(getStart()->getCoords());
-    std::valarray<double> coord2(getStart()->getCoords());
+    std::valarray<double> coord2(getEnd()->getCoords());
     std::valarray<double> diffVec = coord1 - coord2;
     this->_length = std::pow(diffVec, 2.0).sum();
     this->_weight = _sectionArea * _length * _density;
@@ -63,12 +82,4 @@ void Element::calcElem()
     if(DEBUGLVL>1)
         printMtx(_localStiffness, 6, 8);
     double _yieldStress;  // Stress at which material fails
-}
-
-Element::Element()
-{
-    _startNode = NULL;
-    _endNode = NULL;
-    _sectionArea = 0;
-    _youngModulus = 0;
 }
