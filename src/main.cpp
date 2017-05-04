@@ -171,6 +171,6 @@ if(DEBUGLVL > 2){
     // Make available to the webgl renderer??
     t.outputJSON(*output);
     if(output->rdbuf() != std::cout.rdbuf())
-        dynamic_cast<std::ofstream>(*output).close();
+        dynamic_cast<std::ofstream*>(output)->close();
     return 0;
 }
