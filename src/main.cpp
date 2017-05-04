@@ -148,6 +148,7 @@ if(DEBUGLVL > 2){
     std::vector<Element> edges(j["Edges"].size());
 
     // Loop through all vertices and add them to the vector
+    #pragma omp parallel for
     for (int pos = 0; pos < j["Vertices"].size(); pos++)
     {
         double x = j["Vertices"][pos]["XYZPosition"][0];
@@ -171,6 +172,7 @@ if(DEBUGLVL > 2){
     clock_gettime(CLOCK_MONOTONIC, &times[2]);
 
     // Now iterate over the edges and create the connections between trussNodes
+    #pragma omp parallel for
     for (int pos = 0; pos < j["Edges"].size(); pos++)
     {
      	int e0 = j["Edges"][pos]["Endpoints"][0];
