@@ -78,12 +78,12 @@ bool Truss::solve()
         int nodeId = this->_nodes[i].getId();   // Note that node numbering starts at 0, not 1
         std::cout << "Node id: " << nodeId << "\n";
         std::cout << "Farthest index: "<<IDX2C(nodeId, 2, numNodes) << "\n";
-        Re[IDX2C(nodeId, 0, numNodes)] = this->_nodes[i].getConstX();
-        Re[IDX2C(nodeId, 1, numNodes)] = this->_nodes[i].getConstY();
-        Re[IDX2C(nodeId, 2, numNodes)] = this->_nodes[i].getConstZ();
-        Ld[IDX2C(nodeId, 0, numNodes)] = this->_nodes[i].getLoadX();
-        Ld[IDX2C(nodeId, 1, numNodes)] = this->_nodes[i].getLoadY();
-        Ld[IDX2C(nodeId, 2, numNodes)] = this->_nodes[i].getLoadZ();
+        Re[IDX2C(nodeId, 0, 3)] = this->_nodes[i].getConstX();
+        Re[IDX2C(nodeId, 1, 3)] = this->_nodes[i].getConstY();
+        Re[IDX2C(nodeId, 2, 3)] = this->_nodes[i].getConstZ();
+        Ld[IDX2C(nodeId, 0, 3)] = this->_nodes[i].getLoadX();
+        Ld[IDX2C(nodeId, 1, 3)] = this->_nodes[i].getLoadY();
+        Ld[IDX2C(nodeId, 2, 3)] = this->_nodes[i].getLoadZ();
         std::cout << "Node " << i << " constraints:\n";
         std::cout << Re[IDX2C(nodeId, 0, numNodes)] << std::endl;
         std::cout << Re[IDX2C(nodeId, 1, numNodes)] << std::endl;
