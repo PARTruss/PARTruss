@@ -1,5 +1,6 @@
 #include <vector>
 #include <iostream>
+#include <ostream>
 
 #ifndef JSON
 #include "json.hpp"

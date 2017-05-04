@@ -16,6 +16,8 @@
 #include <utility>
 #include <valarray>
 #include <iomanip>
+#include <istream>
+#include <ostream>
 
 #ifndef JSON
 #include "json.hpp"
