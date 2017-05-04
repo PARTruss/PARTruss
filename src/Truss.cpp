@@ -46,6 +46,10 @@ Truss::Truss(std::vector<Element> & Elements, std::vector<Node> & Nodes)
     _elements = Elements;
 }
 
+Truss::~Truss(){
+    free(_systemStiffnessMatrix);
+}
+
  // Very much based off of the implementation in 
  // https://www.mathworks.com/matlabcentral/fileexchange/31350-truss-solver-and-genetic-algorithm-optimzer?focused=5188720&tab=function#feedbacks
 bool Truss::solve()   
@@ -227,6 +231,13 @@ bool Truss::solve()
     // Where displacement of each node is a 3-vector for the x,y,z components.
     // At this point the changes in each location should be written back, the forces in each element should be stored,
     // And json output should be written out.
+
+    free(Ld);
+    free(Re);
+    free(A);
+    free(f);
+    free(d);
+    free(D);
           
     return true;
 }
