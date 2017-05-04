@@ -91,11 +91,11 @@ void parseArgs(int argc, char* argv[], std::istream* &input, std::ostream* &outp
     if(infile == NULL)
         input = &std::cin;
     else
-        input = &ifstream(input);
+        input = &std::ifstream(input);
     if(strcmp(outfile,"-")==0)
         output = &std::cout;
     else
-        output = &ofstream(output);
+        output = &std::ofstream(output);
 }
 
 int main( int argc, char ** argv )
@@ -170,7 +170,7 @@ if(DEBUGLVL > 2){
     // Write to json  
     // Make available to the webgl renderer??
     t.outputJSON(*output);
-    if(if (output->rdbuf() != std::cout.rdbuf()))
+    if(output->rdbuf() != std::cout.rdbuf())
         ((std::ofstream) (*output)).close();
     return 0;
 }
