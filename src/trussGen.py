@@ -6,9 +6,9 @@ import random
 
 random.seed()
 # Maximum force allowabe:
-MAX_FORCE_X = 500.0
-MAX_FORCE_Y = 500.0
-MAX_FORCE_Z = 500.0
+MAX_FORCE_X = 500000000.0
+MAX_FORCE_Y = 500000000.0
+MAX_FORCE_Z = 500000000.0
 
 if len(sys.argv) < 3:
 	print("USAGE: {} truss_repetitions output_filename.json".format(sys.argv[0]))
