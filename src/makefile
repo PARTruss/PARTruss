@@ -17,3 +17,8 @@ Element.o: Element.cpp Element.hpp
 	
 main.o: main.cpp 
 	$(CXX) $(CXXFLAGS) -c main.cpp
+
+clean: 
+	rm -r *.o
+	rm -r *.gch
+	rm main
