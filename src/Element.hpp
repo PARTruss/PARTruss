@@ -28,7 +28,9 @@ class Element
         this->_endNode = &end;
         this->_sectionArea = section;
         this->_youngModulus = E;
+	calcElem();
     }
+    void calcElem();
     
     // Getters:
     Node const * const getStart() const { return this->_startNode; }

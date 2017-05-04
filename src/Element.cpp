@@ -17,13 +17,18 @@ Element::Element(Node & start, Node & end, double area, double E)
     _endNode = &end;
     _sectionArea = area;
     _youngModulus = E;
+    calcElem();
+}
+
+void Element::calcElem()
+{
     // Additional processing and setting of members not directly from args:
-    std::valarray<double> coord1(start.getCoords());
-    std::valarray<double> coord2(end.getCoords());
+    std::valarray<double> coord1(getStart()->getCoords());
+    std::valarray<double> coord2(getStart()->getCoords());
     std::valarray<double> diffVec = coord1 - coord2;
     this->_length = std::pow(diffVec, 2.0).sum();
     this->_weight = _sectionArea * _length * _density;
-    this->_K = _sectionArea * E / _length;  // Stiffness calculation
+    this->_K = _sectionArea * _youngModulus / _length;  // Stiffness calculation
     this->_XYZRatio = diffVec/_length;  // Ratio of x,y,z deltas to length
     // Assign congruent transformation matrix as dot product of transpose of 
     //_XYZRatio with itself:
