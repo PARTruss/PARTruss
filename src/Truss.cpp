@@ -244,7 +244,7 @@ void Truss::outputJSON()
         edges += "{\"Endpoints\": " + array2string(endpoints);
     	edges += ", \"ElasticModulus\": " +  std::to_string(this->_elements[i].getMod());
     	edges += ", \"SectionArea\": " + std::to_string(this->_elements[i].getArea());
-    	edges += ", \"Force\": ", array2string(this->_elements[i].getForce());
+    	edges += ", \"Force\": ", std::to_string(this->_elements[i].getForce());
     	edges += ", \"Stress\": " + std::to_string(this->_elements[i].getStress()) + '}';
         if ( i < numEdges - 1) { edges += ", "; }
     }
