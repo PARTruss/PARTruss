@@ -30,7 +30,7 @@ class Element
     double const getMod() const { return this->_youngModulus; }
     double const getArea() const { return this->_sectionArea; } 
     double const getForce() const { return this->_force; }
-    double const getStress() const { return this->_force/this->sectionArea; }
+    double const getStress() const { return this->_force/this->_sectionArea; }
   
   //private:
     // Representation:
