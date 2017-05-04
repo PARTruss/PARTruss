@@ -26,7 +26,7 @@ json_to_dump = { 'Vertices':[], 'Edges':[] }
 for i in range(0,num_repetitions):
 	for loc in locations:
 		loc2 = loc[:]
-		loc2[2] += i - (num_repetitions/2)
+		loc2[2] = i - (num_repetitions/2.0)
 		vertex = { 'XYZPosition':loc2, 'XYZAppliedForces':[0.0,0.0,0.0], 'Anchored':[0.0,0.0,0.0] }
 		json_to_dump['Vertices'].append(vertex)
 
