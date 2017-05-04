@@ -57,14 +57,15 @@ bool Truss::solve()
     int numNodes = this->_nodes.size();
     int numEdges = this->_elements.size();
     // Allocate a bunch of arrays:
-    double* K = (double*)calloc( sizeof(double), pow(numNodes * 3, 2) ); // Global stiffness matrix
+    _systemStiffnessMatrix = (double*)calloc( sizeof(double), pow(numNodes * 3, 2) ); // Global stiffness matrix
     bool* Re = (bool*)calloc( sizeof(bool), numNodes * 3 );          // All restraints on each node 
     double* Ld = (double*)calloc( sizeof(double), numNodes * 3 );        // All loads on each node
-    if ( K == NULL || Re == NULL || Ld == NULL )
+    if ( _systemStiffnessMatrix == NULL || Re == NULL || Ld == NULL )
     {
         std::cerr << "ERROR: Malloc failed to allocate memory in the truss solver member function!\n";
         return false;
     }
+    _stiffnessMatrixSize = numNodes * 3;
     // Populate the load and restraint matrices from the nodes:
     #pragma omp parallel for
     for ( int i = 0 ; i < numNodes; i ++ )
@@ -91,7 +92,7 @@ bool Truss::solve()
             std::cout << Ld[IDX2C(nodeId, 2, 3)] << std::endl;
         }
     }
-    // Now for each element, add its global-coordinate stiffness matrix to the system matrix K
+    // Now for each element, add its global-coordinate stiffness matrix to the system matrix _systemStiffnessMatrix
     // The locations where each quadrant of the element matrix fit into the system matrix
     //are based on the indices of the nodes at each end of the element.
     #pragma omp parallel for
@@ -115,15 +116,12 @@ bool Truss::solve()
                     std::cout << local_stiffness[IDX2C(j, k, 6)] << "\t";
                 }
                 #pragma omp atomic
-                K[IDX2C(indices[j], indices[k], numNodes*3)] += local_stiffness[IDX2C(j, k, 6)];
+                _systemStiffnessMatrix[IDX2C(indices[j], indices[k], numNodes*3)] += local_stiffness[IDX2C(j, k, 6)];
             }
             if(DEBUGLVL>2)
                 std::cout << "\n";
         }
     }
-    // Now that the global stiffness matrix exists, save it!
-    this->_systemStiffnessMatrix = K;
-    this->_stiffnessMatrixSize = numNodes * 3;
     // Now need to filter the stiffness matrix based on which nodes are/aren't restrained:
     // (it's a degrees of freedom indexing vector)
     std::vector<int> dof;
@@ -141,9 +139,9 @@ bool Truss::solve()
     if(COMMENTARY>0)
         std::cout << "Printing system matrix: (full)\n";
    if(DEBUGLVL>1)
-        printMtx(K, 3*numNodes, 8);
+        printMtx(_systemStiffnessMatrix, 3*numNodes, 8);
 
-    // TODO: use thrust or something to efficiently filter the K matrix and Ld vector (view Ld as a flattened matrix)?
+    // TODO: use thrust or something to efficiently filter the _systemStiffnessMatrix matrix and Ld vector (view Ld as a flattened matrix)?
     // Entire row-columns that correspond to the axis on which a node is constrained must be dropped.
     // Corresponding forces in restrained directions for each node in the external force matrix/vector
     //are also to be dropped.
@@ -163,7 +161,7 @@ bool Truss::solve()
     #pragma omp parallel for
     for (int i = 0; i < dof.size(); i++) {
         for (int k = 0; k < dof.size(); k++) {
-            A[IDX2C(i, k, dof.size())] = K[IDX2C(dof[i], dof[k], 3*numNodes)];
+            A[IDX2C(i, k, dof.size())] = _systemStiffnessMatrix[IDX2C(dof[i], dof[k], 3*numNodes)];
         }
         f[i] = Ld[dof[i]];  // This turns the 3 x numNodes matrix Ld into a filtered column vector
     }
