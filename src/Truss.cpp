@@ -6,6 +6,8 @@
 #include <cstddef>
 #include <valarray>
 #include <cmath>
+//#include <cstddef>
+#include <omp.h>
 #ifndef TRUSS
 #include "Truss.hpp"
 #define TRUSS
@@ -40,7 +42,12 @@ bool elemEqual(Element & e1, Element & e2)
 
 Truss::Truss(std::vector<Element> & Elements, std::vector<Node> & Nodes)
 {
+#pragma omp sections
+{
     // Iterate over elements and nodes and add them:
+    #pragma omp section
+    {
+    #pragma omp parallel for
     for (int i = 0; i < Nodes.size(); i++)
     {
         if (this->addNode(Nodes[i]))
@@ -49,7 +56,10 @@ Truss::Truss(std::vector<Element> & Elements, std::vector<Node> & Nodes)
             Nodes[i].setId(i);
         }
     }
-    
+    }
+    #pragma omp section
+    {
+    #pragma omp parallel for
     for (int i = 0; i < Elements.size(); i++)
     {
         if (this->addElement(Elements[i]))
@@ -58,10 +68,11 @@ Truss::Truss(std::vector<Element> & Elements, std::vector<Node> & Nodes)
             // _totalWeight += Elements[i].getWeight();
         }
     }
+    }
+}
 }
 
- // This is where the magic needs to happen...
- // Very much based off of the approach in 
+ // Very much based off of the implementation in 
  // https://www.mathworks.com/matlabcentral/fileexchange/31350-truss-solver-and-genetic-algorithm-optimzer?focused=5188720&tab=function#feedbacks
 bool Truss::solve()   
 {
@@ -77,6 +88,7 @@ bool Truss::solve()
         return false;
     }
     // Populate the load and restraint matrices from the nodes:
+    #pragma omp parallel for
     for ( int i = 0 ; i < numNodes; i ++ )
     {
         int nodeId = this->_nodes[i].getId();   // Note that node numbering starts at 0, not 1
@@ -104,6 +116,7 @@ bool Truss::solve()
     // Now for each element, add its global-coordinate stiffness matrix to the system matrix K
     // The locations where each quadrant of the element matrix fit into the system matrix
     //are based on the indices of the nodes at each end of the element.
+    #pragma omp parallel for
     for (int i = 0; i < numEdges; i++)
     {             
         int node1 = this->_elements[i].getStart()->getId();
@@ -121,7 +134,10 @@ bool Truss::solve()
                 // Add the values from the element's stiffness matrix onto the global matrix
                 if(DEBUGLVL>2)
                     std::cout << local_stiffness[IDX2C(j, k, 6)] << "\t";
-                K[IDX2C(indices[j], indices[k], numNodes*3)] += local_stiffness[IDX2C(j, k, 6)];
+                //#pragma omp atomic
+                //{
+                  K[IDX2C(indices[j], indices[k], numNodes*3)] += local_stiffness[IDX2C(j, k, 6)];
+                //}
             }
             if(DEBUGLVL>2)
                 std::cout << "\n";
@@ -166,6 +182,7 @@ bool Truss::solve()
         return false;
     }
     // Copying over just the values that matter into A and f
+    #pragma omp parallel for
     for (int i = 0; i < dof.size(); i++) {
         for (int k = 0; k < dof.size(); k++) {
             A[IDX2C(i, k, dof.size())] = K[IDX2C(dof[i], dof[k], 3*numNodes)];
@@ -200,18 +217,21 @@ bool Truss::solve()
       std::cerr << "ERROR: could not allocate memory for full displacement vector.\n";
       return false;
     }
+    #pragma omp parallel for
     for ( int i = 0; i < dof.size(); i++ )
     {
       // All other displacements are 0, implicitly by calloc
       D[dof[i]] = d[i];
     }
     // Update all nodes with their respective displacements:
+    #pragma omp parallel for
     for ( int i = 0; i < numNodes; i++ )
     {
       int nodeId = this->_nodes[i].getId();
       this->_nodes[i].addDisplacement(D[nodeId * 3], D[nodeId * 3 + 1], D[nodeId * 3 + 2]);
     }
     // Now solve for the force in each element and update it:
+    //#pragma omp parallel for
     for ( int i = 0; i < numEdges; i++ )
     {
       int elemId = this->_elements[i].getId();
