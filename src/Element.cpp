@@ -30,7 +30,7 @@ Element::Element()
 }
 
 
-void setElem(Node & start, Node & end, double section, double E)
+void Element::setElem(Node & start, Node & end, double section, double E)
 {
     this->_startNode = &start;
     this->_endNode = &end;
