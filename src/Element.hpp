@@ -29,6 +29,8 @@ class Element
     int const getId() const { return this->_id; }
     double const getMod() const { return this->_youngModulus; }
     double const getArea() const { return this->_sectionArea; } 
+    double const getForce() const { return this->_force; }
+    double const getStress() const { return this->_force/this->sectionArea; }
   
   //private:
     // Representation:
@@ -44,4 +46,5 @@ class Element
     constexpr static double _density = 0.284; // Hard-coded density of steel (lbs/in^3)
     constexpr static double _yieldStress = 36000;  // Hard coded stress at which material fails (psi)
     int _id = -1;   // Default invalid value
+    double _force = 0.0;
 };
