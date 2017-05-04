@@ -170,7 +170,7 @@ if(DEBUGLVL > 2){
     // Write to json  
     // Make available to the webgl renderer??
     t.outputJSON(*output);
-    if(*output != std::cout)
-        output->close();
+    if(if (output->rdbuf() != std::cout.rdbuf()))
+        ((std::ofstream) (*output)).close();
     return 0;
 }
