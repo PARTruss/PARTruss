@@ -126,43 +126,41 @@ if(DEBUGLVL > 2){
 }
 
     std::vector<Node> vertices;
-    vertices.reserve(j["vertices"].size());
+    vertices.reserve(j["Vertices"].size());
     std::vector<Element> edges;
+    edges.reserve(j["Edges"].size());
+
     // Loop through all vertices and add them to the vector
-    int count = 0;
-    for (json::iterator itr = j["Vertices"].begin(); itr != j["Vertices"].end(); itr++)
+    for (int pos = 0; pos < j["Vertices"].size(); pos++)
     {
-        double x = (*itr)["XYZPosition"][0];
-		double y =(*itr)["XYZPosition"][1];
-        double z =(*itr)["XYZPosition"][2];
-        bool moveX =(*itr)["Anchored"][0];
-        bool moveY =(*itr)["Anchored"][1];
-        bool moveZ =(*itr)["Anchored"][2];
-        double Fx =(*itr)["XYZAppliedForces"][0];
-        double Fy =(*itr)["XYZAppliedForces"][1];
-        double Fz =(*itr)["XYZAppliedForces"][2];
-        Node n = Node(x, y, z);
+        double x = j["Vertices"][pos]["XYZPosition"][0];
+	double y = j["Vertices"][pos]["XYZPosition"][1];
+        double z = j["Vertices"][pos]["XYZPosition"][2];
+        bool moveX = j["Vertices"][pos]["Anchored"][0];
+        bool moveY = j["Vertices"][pos]["Anchored"][1];
+        bool moveZ = j["Vertices"][pos]["Anchored"][2];
+        double Fx = j["Vertices"][pos]["XYZAppliedForces"][0];
+        double Fy = j["Vertices"][pos]["XYZAppliedForces"][1];
+        double Fz = j["Vertices"][pos]["XYZAppliedForces"][2];
+        Node n = *(new Node(x, y, z));
         std::valarray<bool> constraints {moveX, moveY, moveZ};
         std::valarray<double> loads {Fx, Fy, Fz };
         n.setConstraints(constraints);
         n.setLoad(loads);
-        n.setId(count);
-        count ++;
-        vertices.push_back( n );
+        n.setId(pos);
+        vertices[pos] = n;
     }
 
     // Now iterate over the edges and create the connections between trussNodes
-    count = 0;
-    for (json::iterator itr = j["Edges"].begin(); itr != j["Edges"].end(); itr++)
+    for (int pos = 0; pos < j["Edges"].size(); pos++)
     {
- 	int e0 =(*itr)["Endpoints"][0];
- 	int e1 =(*itr)["Endpoints"][1];
-    	double E =(*itr)["ElasticModulus"];
-    	double section =(*itr)["SectionArea"];
-    	Element e = Element(vertices[e0], vertices[e1], section, E);
-        e.setId(count);
-        count ++;
-        edges.push_back( e );
+ 	int e0 = j["Edges"][pos]["Endpoints"][0];
+ 	int e1 = j["Edges"][pos]["Endpoints"][1];
+    	double E = j["Edges"][pos]["ElasticModulus"];
+    	double section = j["Edges"][pos]["SectionArea"];
+	Element e = *(new Element(vertices[e0], vertices[e1], section, E));
+        e.setId(pos);
+        edges[pos] = e;
     }
     // Then translate to Truss
     
