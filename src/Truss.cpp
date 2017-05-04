@@ -25,51 +25,25 @@ using json = nlohmann::json;
 
 extern int solveMatrix(double *A_in, int n, double *b_in, double *x_out);
 
-bool nodeEqual(Node n1, Node n2 )
-{
-    return n1.getX() == n2.getX() &&
-        n1.getY() == n2.getY() &&
-        n1.getZ() == n2.getZ();
-}
-
-bool elemEqual(Element & e1, Element & e2)
-{
-  return ( nodeEqual(*e1.getStart(), *e2.getEnd()) &&
-        nodeEqual(*e1.getEnd(), *e2.getStart()) ) ||
-      ( nodeEqual(*e1.getStart(), *e2.getStart()) &&
-      nodeEqual(*e1.getEnd(), *e2.getEnd()) );
-}
+//bool nodeEqual(Node n1, Node n2 )
+//{
+//    return n1.getX() == n2.getX() &&
+//        n1.getY() == n2.getY() &&
+//        n1.getZ() == n2.getZ();
+//}
+//
+//bool elemEqual(Element & e1, Element & e2)
+//{
+//  return ( nodeEqual(*e1.getStart(), *e2.getEnd()) &&
+//        nodeEqual(*e1.getEnd(), *e2.getStart()) ) ||
+//      ( nodeEqual(*e1.getStart(), *e2.getStart()) &&
+//      nodeEqual(*e1.getEnd(), *e2.getEnd()) );
+//}
 
 Truss::Truss(std::vector<Element> & Elements, std::vector<Node> & Nodes)
 {
-#pragma omp sections
-{
-    // Iterate over elements and nodes and add them:
-    #pragma omp section
-    {
-    #pragma omp parallel for
-    for (int i = 0; i < Nodes.size(); i++)
-    {
-        if (this->addNode(Nodes[i]))
-        {
-            this->_nodes[this->_nodes.size()-1].setId(i);
-            Nodes[i].setId(i);
-        }
-    }
-    }
-    #pragma omp section
-    {
-    #pragma omp parallel for
-    for (int i = 0; i < Elements.size(); i++)
-    {
-        if (this->addElement(Elements[i]))
-        {
-            this->_elements[this->_elements.size()-1].setId(i);
-            // _totalWeight += Elements[i].getWeight();
-        }
-    }
-    }
-}
+    _nodes = Nodes;
+    _elements = Elements;
 }
 
  // Very much based off of the implementation in 

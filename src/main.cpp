@@ -129,6 +129,7 @@ if(DEBUGLVL > 2){
     vertices.reserve(j["vertices"].size());
     std::vector<Element> edges;
     // Loop through all vertices and add them to the vector
+    int count = 0;
     for (json::iterator itr = j["Vertices"].begin(); itr != j["Vertices"].end(); itr++)
     {
         double x = (*itr)["XYZPosition"][0];
@@ -145,10 +146,13 @@ if(DEBUGLVL > 2){
         std::valarray<double> loads {Fx, Fy, Fz };
         n.setConstraints(constraints);
         n.setLoad(loads);
+        n.setId(count);
+        count ++;
         vertices.push_back( n );
     }
 
     // Now iterate over the edges and create the connections between trussNodes
+    count = 0;
     for (json::iterator itr = j["Edges"].begin(); itr != j["Edges"].end(); itr++)
     {
  	int e0 =(*itr)["Endpoints"][0];
@@ -156,6 +160,8 @@ if(DEBUGLVL > 2){
     	double E =(*itr)["ElasticModulus"];
     	double section =(*itr)["SectionArea"];
     	Element e = Element(vertices[e0], vertices[e1], section, E);
+        e.setId(count);
+        count ++;
         edges.push_back( e );
     }
     // Then translate to Truss
