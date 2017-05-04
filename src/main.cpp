@@ -18,6 +18,7 @@
 #include <iomanip>
 #include <istream>
 #include <ostream>
+#include <ctime>
 
 #ifndef JSON
 #include "json.hpp"
@@ -40,6 +41,22 @@
 #endif
 
 #define DEBUG 3
+
+struct timespec t_start,
+                t_postRead,
+                t_postVerticesImport,
+                t_postEdgesImport,
+                t_postSolve,
+
+                postRestraintMatrix,
+                postReducedStiffness
+                postGlobalStiffness,
+                postGPU,
+                postDisplacements,
+                postForceCalc,
+                t_postWrite;
+struct timespec times[12];
+
 
 int DEBUGLVL=0;
 int COMMENTARY=0;
@@ -111,7 +128,9 @@ int main( int argc, char ** argv )
     json j;
     if(COMMENTARY > 0)
         std::cout << "Reading input file"<<std::endl;
+    clock_gettime(CLOCK_MONOTONIC, &times[0]);
     *input >> j;
+    clock_gettime(CLOCK_MONOTONIC, &times[1]);
     
 if(DEBUGLVL > 2){
     std::cout << "Vertices\n";
@@ -150,13 +169,14 @@ if(DEBUGLVL > 2){
         count ++;
         vertices.push_back( n );
     }
+    clock_gettime(CLOCK_MONOTONIC, &times[2]);
 
     // Now iterate over the edges and create the connections between trussNodes
     count = 0;
     for (json::iterator itr = j["Edges"].begin(); itr != j["Edges"].end(); itr++)
     {
- 	int e0 =(*itr)["Endpoints"][0];
- 	int e1 =(*itr)["Endpoints"][1];
+     	int e0 =(*itr)["Endpoints"][0];
+     	int e1 =(*itr)["Endpoints"][1];
     	double E =(*itr)["ElasticModulus"];
     	double section =(*itr)["SectionArea"];
     	Element e = Element(vertices[e0], vertices[e1], section, E);
@@ -164,12 +184,17 @@ if(DEBUGLVL > 2){
         count ++;
         edges.push_back( e );
     }
+    clock_gettime(CLOCK_MONOTONIC, &times[3]);
+
     // Then translate to Truss
     
     Truss t = Truss(edges,vertices);
     
     // Solve
-    if ( t.solve() )
+    int retval = t.solve()
+    clock_gettime(CLOCK_MONOTONIC, &times[10]);
+
+    if ( retval != 0 )
     {
         if(COMMENTARY>2)
             std::cout << "WOO! Truss has been solved!\n";
@@ -181,7 +206,21 @@ if(DEBUGLVL > 2){
     // Write to json  
     // Make available to the webgl renderer??
     t.outputJSON(*output);
+    clock_gettime(CLOCK_MONOTONIC, &times[11]);
     if(output->rdbuf() != std::cout.rdbuf())
         dynamic_cast<std::ofstream*>(output)->close();
+    float elapsed[11];
+    for(int i=0;i<11;i++){
+        elapsed[i] = (times[i+1].tv_sec - times[0].tv_sec);
+        elapsed[i] += (times[i+1].tv_nsec - times[0].tv_nsec) / 1000000000.0;
+    }
+
+    for(int i=0;i<11;i++){
+        if(i==0)
+            std::cout<<elapsed[i]<<" ("<<elapsed[i]<<")"<<std::endl;
+        else
+            std::cout<<elapsed[i]<<" ("<<elapsed[i]-elapsed[i-1]<<")"<<std::endl;
+    }
+
     return 0;
 }

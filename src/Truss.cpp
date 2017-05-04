@@ -24,6 +24,14 @@ extern int COMMENTARY;
 
 using json = nlohmann::json;
 
+extern struct timespec  postRestraintMatrix,
+                        postReducedStiffness
+                        postGlobalStiffness,
+                        postGPU,
+                        postDisplacements,
+                        postForceCalc,
+                        t_postWrite;
+
 
 //bool nodeEqual(Node n1, Node n2 )
 //{
@@ -93,6 +101,7 @@ bool Truss::solve()
         }
     }
     // Now for each element, add its global-coordinate stiffness matrix to the system matrix _systemStiffnessMatrix
+    clock_gettime(CLOCK_MONOTONIC, &times[4]);
     // The locations where each quadrant of the element matrix fit into the system matrix
     //are based on the indices of the nodes at each end of the element.
     #pragma omp parallel for
@@ -122,6 +131,9 @@ bool Truss::solve()
                 std::cout << "\n";
         }
     }
+
+    clock_gettime(CLOCK_MONOTONIC, &times[5]);
+    
     // Now need to filter the stiffness matrix based on which nodes are/aren't restrained:
     // (it's a degrees of freedom indexing vector)
     std::vector<int> dof;
@@ -165,6 +177,7 @@ bool Truss::solve()
         }
         f[i] = Ld[dof[i]];  // This turns the 3 x numNodes matrix Ld into a filtered column vector
     }
+    clock_gettime(CLOCK_MONOTONIC, &times[6]);
     if(COMMENTARY>1)
         std::cout << "Printing reduced matrix:\n";
     if(DEBUGLVL>1)
@@ -180,6 +193,7 @@ bool Truss::solve()
     if(COMMENTARY>0)
         std::cout<<"Sending to GPU"<<std::endl;
     int cuda_status = solveMatrix( A, dof.size(), f, d );
+    clock_gettime(CLOCK_MONOTONIC, &times[7]);
     if ( cuda_status != 0 )
     {
       std::cerr << "ERROR: Call to CuSolve in truss solve member function failed!\n";
@@ -206,6 +220,7 @@ bool Truss::solve()
       int nodeId = this->_nodes[i].getId();
       this->_nodes[i].addDisplacement(D[nodeId * 3], D[nodeId * 3 + 1], D[nodeId * 3 + 2]);
     }
+    clock_gettime(CLOCK_MONOTONIC, &times[8]);
     // Now solve for the force in each element and update it:
     #pragma omp parallel for
     for ( int i = 0; i < numEdges; i++ )
@@ -224,6 +239,7 @@ bool Truss::solve()
       //std::cout << disp_delt[0]*XYZRatio[0] + disp_delt[1]*XYZRatio[1] + disp_delt[2]*XYZRatio[2] << std::endl;
       
     }
+    clock_gettime(CLOCK_MONOTONIC, &times[9]);
     // Note that indices not stored in dof have a 0 displacement for that node and coordinate direction (xyz).
     // Then the force in each element is k( (1/L)(dx, dy, dz)dot(displacement_node_2 - displacement_node1) )
     // Where displacement of each node is a 3-vector for the x,y,z components.
