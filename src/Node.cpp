@@ -15,6 +15,20 @@ Node::Node(double x, double y, double z)
     this->_id = 0;
 }
 
+Node::Node(){
+    this->_coords = std::valarray<double>(3);
+    this->_coords[0] = 0;
+    this->_coords[1] = 0;
+    this->_coords[2] = 0;
+    this->_id = 0;
+}
+
+void Node::setPosition(double x, double y, double z){
+    this->_coords[0] = x;
+    this->_coords[1] = y;
+    this->_coords[2] = z;
+}
+
 bool Node::setLoad(std::valarray<double> & P)
 {
     bool fail = false;
