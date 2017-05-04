@@ -88,6 +88,10 @@ bool Truss::solve()
         std::cout << Re[IDX2C(nodeId, 0, 3)] << std::endl;
         std::cout << Re[IDX2C(nodeId, 1, 3)] << std::endl;
         std::cout << Re[IDX2C(nodeId, 2, 3)] << std::endl;
+        std::cout << "Node " << i << " external forces:\n";
+        std::cout << Ld[IDX2C(nodeId, 0, 3)] << std::endl;
+        std::cout << Ld[IDX2C(nodeId, 1, 3)] << std::endl;
+        std::cout << Ld[IDX2C(nodeId, 2, 3)] << std::endl;
     }
     // Now for each element, add its global-coordinate stiffness matrix to the system matrix K
     // The locations where each quadrant of the element matrix fit into the system matrix
