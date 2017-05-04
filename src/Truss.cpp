@@ -85,9 +85,9 @@ bool Truss::solve()
         Ld[IDX2C(nodeId, 1, 3)] = this->_nodes[i].getLoadY();
         Ld[IDX2C(nodeId, 2, 3)] = this->_nodes[i].getLoadZ();
         std::cout << "Node " << i << " constraints:\n";
-        std::cout << Re[IDX2C(nodeId, 0, numNodes)] << std::endl;
-        std::cout << Re[IDX2C(nodeId, 1, numNodes)] << std::endl;
-        std::cout << Re[IDX2C(nodeId, 2, numNodes)] << std::endl;
+        std::cout << Re[IDX2C(nodeId, 0, 3)] << std::endl;
+        std::cout << Re[IDX2C(nodeId, 1, 3)] << std::endl;
+        std::cout << Re[IDX2C(nodeId, 2, 3)] << std::endl;
     }
     // Now for each element, add its global-coordinate stiffness matrix to the system matrix K
     // The locations where each quadrant of the element matrix fit into the system matrix
