@@ -53,7 +53,9 @@ void usage( int argc, char ** argv )
 {
 	if ( argc != 2 )
 	{
-		fprintf(stderr, "USAGE: %s <truss filename>\n", argv[0]);
+        std::cerr<<"Usage is:"<<std::endl;
+        std::cerr<<argv[0]<<" <inputFile> [-vvvvv] [-ccccc] -o <outFile>"<<endl;
+        std::cerr<<argv[0]<<" -o -   (to read from STDIN, write to STDOUT)"<<endl;
 		exit(EXIT_FAILURE);
 	}
 }
@@ -92,6 +94,7 @@ void parseArgs(int argc, char* argv[], std::istream* &input, std::ostream* &outp
         input = &std::cin;
     else
         input = new std::ifstream(infile);
+    if(outFile == NULL) usage(argc, argv);
     if(strcmp(outfile,"-")==0)
         output = &std::cout;
     else
