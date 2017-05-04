@@ -178,7 +178,7 @@ bool Truss::solve()
         printMtx(A, dof.size(), 8);
     if(COMMENTARY>1)
         std::cout << "Printing forces:\n";
-    if(DEBUGLV>1)
+    if(DEBUGLVL>1)
         for (int i = 0; i < dof.size(); i++) {
             std::cout << f[i]<<std::endl;
         }
