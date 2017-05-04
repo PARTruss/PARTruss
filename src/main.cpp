@@ -142,7 +142,7 @@ if(DEBUGLVL > 2){
         double Fx = j["Vertices"][pos]["XYZAppliedForces"][0];
         double Fy = j["Vertices"][pos]["XYZAppliedForces"][1];
         double Fz = j["Vertices"][pos]["XYZAppliedForces"][2];
-        Node n = *(new Node(x, y, z));
+        Node n = Node(x, y, z);
         std::valarray<bool> constraints {moveX, moveY, moveZ};
         std::valarray<double> loads {Fx, Fy, Fz };
         n.setConstraints(constraints);
@@ -158,7 +158,7 @@ if(DEBUGLVL > 2){
  	int e1 = j["Edges"][pos]["Endpoints"][1];
     	double E = j["Edges"][pos]["ElasticModulus"];
     	double section = j["Edges"][pos]["SectionArea"];
-	Element e = *(new Element(vertices[e0], vertices[e1], section, E));
+	Element e = Element(vertices[e0], vertices[e1], section, E);
         e.setId(pos);
         edges[pos] = e;
     }

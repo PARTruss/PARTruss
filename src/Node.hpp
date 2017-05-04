@@ -30,7 +30,7 @@ public:
 	
 	int const getId() const { return this->_id; }
 	void setId(int n) { this->_id = n; }
-	
+        void setPos(double x, double y, double z) { this->_coords[0] = x; this->_coords[1] = y; this->_coords[2] = z; }	
 // Utility:
     bool setConstraints(std::valarray<bool> &  C);
     bool setLoad(std::valarray<double> & P);
