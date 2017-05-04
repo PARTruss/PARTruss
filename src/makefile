@@ -19,6 +19,6 @@ main.o: main.cpp
 	$(CXX) $(CXXFLAGS) -c main.cpp
 
 clean: 
-	rm -r *.o
-	rm -r *.gch
-	rm main
+	rm main | true
+	rm -r *.o | true
+	rm -r *.gch | true
