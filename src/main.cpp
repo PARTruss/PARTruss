@@ -132,7 +132,7 @@ if(DEBUGLVL > 2){
     for (int pos = 0; pos < j["Vertices"].size(); pos++)
     {
         double x = j["Vertices"][pos]["XYZPosition"][0];
-	    double y = j["Vertices"][pos]["XYZPosition"][1];
+	double y = j["Vertices"][pos]["XYZPosition"][1];
         double z = j["Vertices"][pos]["XYZPosition"][2];
         bool moveX = j["Vertices"][pos]["Anchored"][0];
         bool moveY = j["Vertices"][pos]["Anchored"][1];
@@ -156,9 +156,9 @@ if(DEBUGLVL > 2){
      	int e1 = j["Edges"][pos]["Endpoints"][1];
     	double E = j["Edges"][pos]["ElasticModulus"];
     	double section = j["Edges"][pos]["SectionArea"];
-	Element e = Element(vertices[e0], vertices[e1], section, E);
+	Element &e = edges[pos];
+        e.setElem(vertices[e0], vertices[e1], section, E);
         e.setId(pos);
-        edges[pos] = e;
     }
     // Then translate to Truss
     
