@@ -17,13 +17,13 @@
 #define JSON
 #endif
 #include "util.hpp"
+#include "cusolver/solveMatrix.h"
 
 extern int DEBUGLVL;
 extern int COMMENTARY;
 
 using json = nlohmann::json;
 
-extern int solveMatrix(double *A_in, int n, double *b_in, double *x_out);
 
 //bool nodeEqual(Node n1, Node n2 )
 //{
