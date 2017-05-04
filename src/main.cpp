@@ -66,7 +66,7 @@ void parseArgs(int argc, char* argv[], std::istream* &input, std::ostream* &outp
     char* outfile = NULL;
     char* infile = NULL;
     for(int i=1;i<argc;i++){
-        if(argv[i][0]='-'){
+        if(argv[i][0]=='-'){
             int c = 1;
             while(argv[i][c]!='\0'){
                 if(argv[i][c]=='v' || argv[i][c]=='V')
