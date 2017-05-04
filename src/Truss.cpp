@@ -16,6 +16,9 @@
 #endif
 #include "util.hpp"
 
+extern int DEBUGGLVL;
+extern int COMMENTARY;
+
 using json = nlohmann::json;
 
 extern int solveMatrix(double *A_in, int n, double *b_in, double *x_out);
@@ -77,22 +80,26 @@ bool Truss::solve()
     for ( int i = 0 ; i < numNodes; i ++ )
     {
         int nodeId = this->_nodes[i].getId();   // Note that node numbering starts at 0, not 1
-        std::cout << "Node id: " << nodeId << "\n";
-        std::cout << "Farthest index: "<<IDX2C(nodeId, 2, numNodes) << "\n";
+        if(DEBUGLVL>1)
+            std::cout << "Node id: " << nodeId << "\n";
+        if(DEBUGLVL>2)
+            std::cout << "Farthest index: "<<IDX2C(nodeId, 2, numNodes) << "\n";
         Re[IDX2C(nodeId, 0, 3)] = this->_nodes[i].getConstX();
         Re[IDX2C(nodeId, 1, 3)] = this->_nodes[i].getConstY();
         Re[IDX2C(nodeId, 2, 3)] = this->_nodes[i].getConstZ();
         Ld[IDX2C(nodeId, 0, 3)] = this->_nodes[i].getLoadX();
         Ld[IDX2C(nodeId, 1, 3)] = this->_nodes[i].getLoadY();
         Ld[IDX2C(nodeId, 2, 3)] = this->_nodes[i].getLoadZ();
-        std::cout << "Node " << i << " constraints:\n";
-        std::cout << Re[IDX2C(nodeId, 0, 3)] << std::endl;
-        std::cout << Re[IDX2C(nodeId, 1, 3)] << std::endl;
-        std::cout << Re[IDX2C(nodeId, 2, 3)] << std::endl;
-        std::cout << "Node " << i << " external forces:\n";
-        std::cout << Ld[IDX2C(nodeId, 0, 3)] << std::endl;
-        std::cout << Ld[IDX2C(nodeId, 1, 3)] << std::endl;
-        std::cout << Ld[IDX2C(nodeId, 2, 3)] << std::endl;
+        if(DEBUGLVL>1){
+            std::cout << "Node " << i << " constraints:\n";
+            std::cout << Re[IDX2C(nodeId, 0, 3)] << std::endl;
+            std::cout << Re[IDX2C(nodeId, 1, 3)] << std::endl;
+            std::cout << Re[IDX2C(nodeId, 2, 3)] << std::endl;
+            std::cout << "Node " << i << " external forces:\n";
+            std::cout << Ld[IDX2C(nodeId, 0, 3)] << std::endl;
+            std::cout << Ld[IDX2C(nodeId, 1, 3)] << std::endl;
+            std::cout << Ld[IDX2C(nodeId, 2, 3)] << std::endl;
+        }
     }
     // Now for each element, add its global-coordinate stiffness matrix to the system matrix K
     // The locations where each quadrant of the element matrix fit into the system matrix
@@ -105,16 +112,19 @@ bool Truss::solve()
         int indices[6] = { 3*node1, 3*node1+1, 3*node1+2, 3*node2, 3*node2+1, 3*node2+2 };
         const double * local_stiffness = this->_elements[i].getLocalStiffness();
         // NOTE: Node numbering starts at 0; hence why the indexing above works.
-        std::cout << "Accessing local stiffness matrices to construct global matrix:\n";
+        if(COMMENTARY>0)
+            std::cout << "Accessing local stiffness matrices to construct global matrix:\n";
         for (int j = 0; j < 6; j ++ )
         {
             for (int k = 0; k < 6; k++ )
             {
                 // Add the values from the element's stiffness matrix onto the global matrix
-                std::cout << local_stiffness[IDX2C(j, k, 6)] << "\t";
+                if(DEBUGLVL>2)
+                    std::cout << local_stiffness[IDX2C(j, k, 6)] << "\t";
                 K[IDX2C(indices[j], indices[k], numNodes*3)] += local_stiffness[IDX2C(j, k, 6)];
             }
-            std::cout << "\n";
+            if(DEBUGLVL>2)
+                std::cout << "\n";
         }
     }
     // Now that the global stiffness matrix exists, save it!
@@ -134,8 +144,8 @@ bool Truss::solve()
             dof.push_back(i);
         }
     }
-   
-    std::cout << "Printing system matrix: (full)\n";
+    if(COMMENTARY>0)
+        std::cout << "Printing system matrix: (full)\n";
     printMtx(K, 3*numNodes, 8);
 
     // TODO: use thrust or something to efficiently filter the K matrix and Ld vector (view Ld as a flattened matrix)?
@@ -161,14 +171,19 @@ bool Truss::solve()
         }
         f[i] = Ld[dof[i]];  // This turns the 3 x numNodes matrix Ld into a filtered column vector
     }
-    std::cout << "Printing reduced matrix:\n";
-    printMtx(A, dof.size(), 8);
-    std::cout << "Printing forces:\n";    
-    for (int i = 0; i < dof.size(); i+=3) {
-        std::cout << f[i]<<" "<< f[i+1]<<" "<< f[i+2]<<" "<<std::endl;
+    if(COMMENTARY>1)
+        std::cout << "Printing reduced matrix:\n";
+    if(DEBUGLVL>1)
+        printMtx(A, dof.size(), 8);
+    if(COMMENTARY>1)
+        std::cout << "Printing forces:\n";
+    for (int i = 0; i < dof.size(); i++) {
+        std::cout << f[i]<<std::endl;
     }
     // At this point the system can now be solved for the displacement of each node!
     // Formula is d = A\f in MATLAB, or d = A^-1 f in more mathy terms.
+    if(COMMENTARY>0)
+        std::cout<<"Sending to GPU"<<std::endl;
     int cuda_status = solveMatrix( A, dof.size(), f, d );
     if ( cuda_status != 0 )
     {
@@ -220,11 +235,12 @@ bool Truss::solve()
     return true;
 }
 
-void Truss::outputJSON()
+void Truss::outputJSON(char* filename)
 {
     // This needs to output JSON stuff...
     // Go through each node and output it in json formatted goodness
     // Go through each vertex and output it in json format
+    std::ofstream out(filename);
     int numNodes = this->_nodes.size();
     int numEdges = this->_elements.size();
     json j;
@@ -253,8 +269,8 @@ void Truss::outputJSON()
     edges += "]";
     //std::cout << edges;
     j["Edges"] = json::parse(edges);
-    std::ofstream o("trussOut.json");
-    o << std::setw(4) << j << std::endl;
+    out << std::setw(4) << j << std::endl;
+    out.close();
 }
 
 
@@ -270,7 +286,8 @@ bool Truss::addNode( Node & n )
         return false;
     }
     _nodes.push_back(n);
-    std::cout << "Node addition successful.\n";
+    if(COMMENTARY>1)
+        std::cout << "Node addition successful.\n";
     return true;
 }
 
@@ -285,6 +302,8 @@ bool Truss::addElement( Element & e )
         std::cerr << "Error: this element has already been added to the truss. Skipping!\n";
         return false;
     }
+    if(COMMENTARY>1)
+        std::cout << "Element addition successful.\n";
     _elements.push_back(e);
     return true;   
 }

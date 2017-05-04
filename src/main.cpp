@@ -39,6 +39,9 @@
 
 #define DEBUG 3
 
+int DEBUGGLVL=0;
+int COMMENTARY=0;
+
 // Set dimensionality of the simulation:
 int DIMENSIONALITY = 2;
 // for convenience
@@ -61,7 +64,7 @@ int main( int argc, char ** argv )
     json j;
     i >> j;
     
-#if DEBUG > 2
+if(DEBUGLVL > 2){
     std::cout << "Vertices\n";
     for (json::iterator i = j["Vertices"].begin(); i != j["Vertices"].end(); i++) {
         std::cout << *i << '\n';
@@ -71,7 +74,7 @@ int main( int argc, char ** argv )
         std::cout << *i << '\n';
     }
     std::cout << "\n\n";
-#endif
+}
 
     std::vector<Node> vertices;
     vertices.reserve(j["vertices"].size());
@@ -113,7 +116,8 @@ int main( int argc, char ** argv )
     // Solve
     if ( t.solve() )
     {
-      std::cout << "WOO! Truss has been solved!\n";
+        if(COMMENTARY>2)
+            std::cout << "WOO! Truss has been solved!\n";
     }
     else
     {
