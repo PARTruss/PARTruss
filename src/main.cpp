@@ -79,7 +79,7 @@ void parseArgs(int argc, char* argv[], std::istream* &input, std::ostream* &outp
                     }
                     outfile = argv[i+1];
                     i++;
-                    continue;
+                    break;
                 }
                 c++;  
             }
