@@ -43,6 +43,19 @@
 #define DEBUG 3
 
 struct timespec times[12];
+string timeMeanings[] = {
+    "Read input data file",
+    "Parse vertices from input",
+    "Parse edges from input",
+    "Calculating load/restraint matrices",
+    "Calculating global stiffness matrix",
+    "Calculating reduced matrix",
+    "Solving on GPU",
+    "Calculating displacements",
+    "Calculating forces/stresses",
+    "Solving system complete",
+    "Writing to output file"
+}
 
 
 int DEBUGLVL=0;
@@ -204,9 +217,10 @@ if(DEBUGLVL > 2){
 
     for(int i=0;i<11;i++){
         if(i==0)
-            std::cout<<elapsed[i]<<" ("<<elapsed[i]<<")"<<std::endl;
+            std::cout<<elapsed[i]<<" ("<<elapsed[i]<<")";
         else
-            std::cout<<elapsed[i]<<" ("<<elapsed[i]-elapsed[i-1]<<")"<<std::endl;
+            std::cout<<elapsed[i]<<" ("<<elapsed[i]-elapsed[i-1]<<")";
+        cout<<"\t"<<timeMeanings[i]<<endl;
     }
 
     return 0;
