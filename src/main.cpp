@@ -58,7 +58,7 @@ void usage( int argc, char ** argv )
 	}
 }
 
-void parseArgs(int argc, char* argv[], istream* &input, ostream* &output){
+void parseArgs(int argc, char* argv[], std::istream* &input, std::ostream* &output){
     input = NULL;
     output = NULL;
     DEBUGLVL = 0;
@@ -89,9 +89,13 @@ void parseArgs(int argc, char* argv[], istream* &input, ostream* &output){
         }
     }
     if(infile == NULL)
-        input = std::cin;
+        input = &std::cin;
+    else
+        input = &ifstream(input);
     if(strcmp(outfile,"-")==0)
-        output = std::cout;
+        output = &std::cout;
+    else
+        output = &ofstream(output);
 }
 
 int main( int argc, char ** argv )
@@ -166,6 +170,7 @@ if(DEBUGLVL > 2){
     // Write to json  
     // Make available to the webgl renderer??
     t.outputJSON(*output);
-    output->close();
+    if(*output != std::cout)
+        output->close();
     return 0;
 }

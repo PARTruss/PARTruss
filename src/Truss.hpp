@@ -31,7 +31,7 @@ class Truss
 public:
     Truss(std::vector<Element> & , std::vector<Node> & );
     bool solve();
-    void outputJSON();    // Output the solved json version to be visualized
+    void outputJSON(std::ostream &);    // Output the solved json version to be visualized
     
 // Getters:
     double const getWeight() const { return this->_totalWeight; }
