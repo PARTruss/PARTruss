@@ -109,7 +109,7 @@ int main( int argc, char ** argv )
 	//usage(argc, argv);
 	// TODO: add err handling for file reading...
     json j;
-    if(COMMENTARY > 0){
+    if(COMMENTARY > 0)
         std::cout << "Reading input file"<<std::endl;
     *input >> j;
     
