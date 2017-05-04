@@ -195,7 +195,6 @@ bool Truss::solve()
     {
       // All other displacements are 0, implicitly by calloc
       D[dof[i]] = d[i];
-      std::cout << "Writing " << d[i] << "\n";
     }
     // Update all nodes with their respective displacements:
     for ( int i = 0; i < numNodes; i++ )
@@ -207,7 +206,18 @@ bool Truss::solve()
     for ( int i = 0; i < numEdges; i++ )
     {
       int elemId = this->_elements[i].getId();
-      // TODO: Finish here...
+      int node1 = this->_elements[i].getStart()->getId();
+      int node2 = this->_elements[i].getEnd()->getId();
+      int indices[6] = { 3*node1, 3*node1+1, 3*node1+2, 3*node2, 3*node2+1, 3*node2+2 };
+      double disp_delt[3] = {
+        D[indices[3]] - D[indices[0]], 
+        D[indices[4]] - D[indices[1]], 
+        D[indices[5]] - D[indices[2]] 
+        };
+      std::valarray<double> XYZRatio = this->_elements[i].getXYZRatios();
+      this->_elements[i].setForce( disp_delt[0]*XYZRatio[0] + disp_delt[1]*XYZRatio[1] + disp_delt[2]*XYZRatio[2] );
+      std::cout << disp_delt[0]*XYZRatio[0] + disp_delt[1]*XYZRatio[1] + disp_delt[2]*XYZRatio[2] << std::endl;
+      
     }
     // Note that indices not stored in dof have a 0 displacement for that node and coordinate direction (xyz).
     // Then the force in each element is k( (1/L)(dx, dy, dz)dot(displacement_node_2 - displacement_node1) )

@@ -20,6 +20,7 @@ class Element
     
     // Setter:
     void setId(int id) { this->_id = id; }
+    void setForce(double f) { this->_force = f; }
     
     // Getters:
     Node const * const getStart() const { return this->_startNode; }
@@ -31,7 +32,7 @@ class Element
     double const getArea() const { return this->_sectionArea; } 
     double const getForce() const { return this->_force; }
     double const getStress() const { return this->_force/this->_sectionArea; }
-  
+    std::valarray<double> const & getXYZRatios() const { return this->_XYZRatio; }  
   //private:
     // Representation:
     Node * _startNode;
