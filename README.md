@@ -1,12 +1,16 @@
 # PARTruss
 Parallel truss structure simulator. Group project in Applied Parallel Computing for Engineers
+https://github.com/PARTruss/PARTruss
 ## Overall Functionality:
 Each straight section of the structure (a truss) can only transmit forces along its axis. These trusses may deform by changing length, though this would be a secondary/stretch goal.
 First and foremost, the forces applied to each truss can be solved in parallel and the resulting stress in the member can be shown by color-coding. Over stressed trusses may fail, changing the dynamics of the system.
 
+## Documentation:
+See final report and user guide in docs folder.
+
 ## Deliverables:
 Graphics front-end to display 2D truss structures
-C++ backend to parse truss description files (.tds)
+C++ backend to parse truss description files (.json)
 Parallel C++ backend to simulate truss structure in response to applied loads
 Graphics frontend to color code truss sections with stress in each member
 Add internal forces from weight of truss sections and connecting nodes
