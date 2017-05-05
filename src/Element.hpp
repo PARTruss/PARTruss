@@ -1,7 +1,7 @@
 // Class for members in a truss
 // NOTE: Only implementing stiffness method for 2D (for now?)!
-// Each element object contains reference to the two nodes it connects 
-// Each element also contains the cross sectional area, elastic modulus, length, 
+// Each element object contains reference to the two nodes it connects
+// Each element also contains the cross sectional area, elastic modulus, length,
 
 #include <cstddef>
 #include <cmath>
@@ -14,41 +14,41 @@
 
 class Element
 {
-  public:
-    // Constructor:
-    Element(Node &, Node &, double, double);
-    Element();
-    
-    // Setter:
-    void setId(int id) { this->_id = id; }
-    void setForce(double f) { this->_force = f; }
-    void setElem(Node & start, Node & end, double section, double E);
-    void calcElem();
-    
-    // Getters:
-    Node const * const getStart() const { return this->_startNode; }
-    Node const * const getEnd() const { return this->_endNode; }
-    double const * const getLocalStiffness() const { return this->_localStiffness; }
-    double getWeight() const { return this->_weight; }
-    int const getId() const { return this->_id; }
-    double const getMod() const { return this->_youngModulus; }
-    double const getArea() const { return this->_sectionArea; } 
-    double const getForce() const { return this->_force; }
-    double const getStress() const { return this->_force/this->_sectionArea; }
-    std::valarray<double> const & getXYZRatios() const { return this->_XYZRatio; }  
+public:
+  // Constructor:
+  Element ( Node &, Node &, double, double );
+  Element();
+
+  // Setter:
+  void setId ( int id ) { this->_id = id; }
+  void setForce ( double f ) { this->_force = f; }
+  void setElem ( Node & start, Node & end, double section, double E );
+  void calcElem();
+
+  // Getters:
+  Node const * const getStart() const { return this->_startNode; }
+  Node const * const getEnd() const { return this->_endNode; }
+  double const * const getLocalStiffness() const { return this->_localStiffness; }
+  double getWeight() const { return this->_weight; }
+  int const getId() const { return this->_id; }
+  double const getMod() const { return this->_youngModulus; }
+  double const getArea() const { return this->_sectionArea; }
+  double const getForce() const { return this->_force; }
+  double const getStress() const { return this->_force / this->_sectionArea; }
+  std::valarray<double> const & getXYZRatios() const { return this->_XYZRatio; }
   //private:
-    // Representation:
-    Node * _startNode;
-    Node * _endNode;
-    double _sectionArea;
-    double _length;
-    std::valarray<double> _XYZRatio = std::valarray<double>(3);
-    double _localStiffness[36];  // 6x6 local stiffness matrix (T'kT)
-    double _youngModulus;
-    double _weight;
-    double _K;
-    constexpr static double _density = 0.284; // Hard-coded density of steel (lbs/in^3)
-    constexpr static double _yieldStress = 36000;  // Hard coded stress at which material fails (psi)
-    int _id = -1;   // Default invalid value
-    double _force = 0.0;
+  // Representation:
+  Node * _startNode;
+  Node * _endNode;
+  double _sectionArea;
+  double _length;
+  std::valarray<double> _XYZRatio = std::valarray<double> ( 3 );
+  double _localStiffness[36];  // 6x6 local stiffness matrix (T'kT)
+  double _youngModulus;
+  double _weight;
+  double _K;
+  constexpr static double _density = 0.284; // Hard-coded density of steel (lbs/in^3)
+  constexpr static double _yieldStress = 36000;  // Hard coded stress at which material fails (psi)
+  int _id = -1;   // Default invalid value
+  double _force = 0.0;
 };
